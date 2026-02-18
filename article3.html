@@ -1,942 +1,542 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>為什麼預售屋行情常被視為房市的先期指標？ | House+好時價 insight</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #2c5aa0;
-            --secondary-color: #4a90e2;
-            --accent-color: #ff6b6b;
-            --success-color: #48bb78;
-            --warning-color: #f56565;
-            --text-dark: #2d3748;
-            --text-light: #4a5568;
-            --bg-light: #f7fafc;
-            --bg-white: #ffffff;
-            --border-color: #e2e8f0;
-            --gradient-start: #667eea;
-            --gradient-end: #764ba2;
-        }
-
-        body {
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background-color: var(--bg-light);
-            overflow-x: hidden;
-        }
-
-        /* Header - 固定式頂部導航列 */
-        header {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            padding: 1rem 0;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: white;
-            text-decoration: none;
-            font-family: 'Noto Serif TC', serif;
-            letter-spacing: 1px;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        /* Hero Section - 醒目的標題區域 */
-        .hero {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
-            padding: 2.5rem 1rem;
-            border-bottom: 4px solid var(--primary-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(102,126,234,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero .container {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--text-dark);
-            margin-bottom: 0.8rem;
-            font-family: 'Noto Serif TC', serif;
-            line-height: 1.4;
-            text-align: left;
-            animation: slideInFromLeft 0.6s ease-out;
-        }
-
-        .last-updated {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            opacity: 0.8;
-            text-align: left;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .last-updated::before {
-            content: "🕐";
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-white);
-            border-radius: 25px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .back-link::before {
-            content: "←";
-            margin-right: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .back-link:hover {
-            background: var(--secondary-color);
-            color: white;
-            transform: translateX(-5px);
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        /* Table of Contents - 目錄導航 */
-        .toc {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .toc::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1), transparent);
-            pointer-events: none;
-        }
-
-        .toc h3 {
-            color: var(--primary-color);
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            position: relative;
-        }
-
-        .toc h3::before {
-            content: "📋";
-            font-size: 1.8rem;
-            animation: bounce 2s infinite;
-        }
-
-        .toc ul {
-            list-style: none;
-            display: grid;
-            gap: 0.8rem;
-        }
-
-        .toc li {
-            padding-left: 2rem;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .toc li::before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-
-        .toc li:hover::before {
-            transform: translateX(5px);
-        }
-
-        .toc a {
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 500;
-            display: inline-block;
-            padding: 0.3rem 0;
-        }
-
-        .toc a:hover {
-            color: var(--primary-color);
-            transform: translateX(5px);
-        }
-
-        /* Article Content - 分段式內容呈現 */
-        .article-content {
-            background: var(--bg-white);
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .intro-text {
-            font-size: 1.08rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
-            border-left: 5px solid var(--primary-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-        }
-
-        .intro-text::before {
-            content: "💡";
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 2rem;
-            opacity: 0.3;
-        }
-
-        /* Section Headers - 清晰的視覺層次 */
-        section {
-            margin: 3rem 0;
-            scroll-margin-top: 100px;
-        }
-
-        h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 3rem 0 1.5rem;
-            font-family: 'Noto Serif TC', serif;
-            position: relative;
-            padding-bottom: 0.8rem;
-            padding-left: 1.2rem;
-        }
-
-        h2::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 5px;
-            background: linear-gradient(180deg, var(--gradient-start), var(--gradient-end));
-            border-radius: 3px;
-        }
-
-        h2::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            border-radius: 2px;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 2rem 0 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        h4 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 1.5rem 0 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        p {
-            margin-bottom: 1.2rem;
-            line-height: 1.8;
-        }
-
-        strong {
-            color: var(--text-dark);
-            font-weight: 700;
-        }
-
-        /* 重點提示框 - 使用漸層背景強調重要資訊 */
-        .highlight-box {
-            background: linear-gradient(135deg, #f6f8fb, #e9f0f7);
-            border-left: 5px solid var(--secondary-color);
-            padding: 1.8rem 2.2rem;
-            margin: 2rem 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .highlight-box::before {
-            content: "💡";
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 2.5rem;
-            opacity: 0.2;
-        }
-
-        .highlight-box p {
-            position: relative;
-            z-index: 1;
-        }
-
-        .highlight-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* 功能列表 - 用綠色勾選/紅色叉號標示 */
-        .feature-list {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2.5rem 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-
-        .feature-list h4 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .feature-list ul {
-            list-style: none;
-            display: grid;
-            gap: 0.5rem;
-        }
-
-        .feature-list li {
-            padding: 1rem 1rem 1rem 3.5rem;
-            position: relative;
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s;
-            border-radius: 8px;
-        }
-
-        .feature-list li:last-child {
-            border-bottom: none;
-        }
-
-        .feature-list li:hover {
-            background: rgba(102, 126, 234, 0.05);
-            transform: translateX(5px);
-        }
-
-        .feature-list li::before {
-            content: "✓";
-            position: absolute;
-            left: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--success-color);
-            font-weight: bold;
-            font-size: 1.4rem;
-            background: rgba(72, 187, 120, 0.15);
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .feature-list.negative li::before {
-            content: "✗";
-            color: var(--warning-color);
-            background: rgba(245, 101, 101, 0.15);
-        }
-
-        /* 方法卡片 - 卡片式佈局帶有hover效果 */
-        .method-cards {
-            display: grid;
-            gap: 2rem;
-            margin: 2.5rem 0;
-        }
-
-        .method-card {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .method-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
-        }
-
-        .method-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
-            border-color: var(--secondary-color);
-        }
-
-        .method-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .method-card h4 {
-            color: var(--primary-color);
-            font-size: 1.35rem;
-            margin-bottom: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .method-card .label {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .method-card p {
-            line-height: 1.8;
-        }
-
-        /* Info Box */
-        .info-box {
-            background: linear-gradient(135deg, #fff5f5, #ffe5e5);
-            border: 2px solid #feb2b2;
-            border-left: 5px solid var(--warning-color);
-            border-radius: 12px;
-            padding: 1.8rem 2.2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.1);
-        }
-
-        .info-box strong {
-            color: #c53030;
-            font-size: 1.1rem;
-        }
-
-        /* 相關連結區塊 */
-        .related-links {
-            background: linear-gradient(135deg, var(--bg-white), #f0f4ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-
-        .related-links h3 {
-            color: var(--primary-color);
-            margin-bottom: 1.8rem;
-            font-size: 1.4rem;
-        }
-
-        .related-links ul {
-            list-style: none;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .related-links li {
-            padding-left: 2rem;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .related-links li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.3rem;
-            transition: transform 0.3s;
-        }
-
-        .related-links li:hover::before {
-            transform: translateX(5px);
-        }
-
-        .related-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .related-links a:hover {
-            color: var(--primary-color);
-            transform: translateX(5px);
-        }
-
-        /* 專業的頁尾設計 */
-        footer {
-            background: linear-gradient(135deg, #1a202c, #2d3748);
-            color: white;
-            padding: 3.5rem 2rem 2.5rem;
-            margin-top: 5rem;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            opacity: 0.85;
-            margin-bottom: 0.6rem;
-            line-height: 1.8;
-        }
-
-        .footer-brand {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-family: 'Noto Serif TC', serif;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* 響應式設計，支援手機瀏覽 */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 2rem 1rem;
-            }
-
-            .hero h1 {
-                font-size: 1.4rem;
-            }
-
-            .container {
-                padding: 0 1rem;
-                margin: 2rem auto;
-            }
-
-            .article-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .toc {
-                padding: 2rem 1.5rem;
-            }
-
-            h2 {
-                font-size: 1.35rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            .method-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .method-card h4 {
-                font-size: 1.15rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
-            }
-
-            .method-card .label {
-                align-self: flex-start;
-            }
-
-            .feature-list {
-                padding: 2rem 1.5rem;
-            }
-
-            .highlight-box {
-                padding: 1.5rem 1.8rem;
-            }
-
-            .related-links {
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        /* 平滑的動畫效果 */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        @keyframes slideInFromLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .article-content section {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        /* 內容元素進入動畫 */
-        .toc {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .method-card {
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .method-card:nth-child(1) { animation-delay: 0.1s; }
-        .method-card:nth-child(2) { animation-delay: 0.2s; }
-        .method-card:nth-child(3) { animation-delay: 0.3s; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>為什麼住宅與商辦必須分開估價？從模型設計看房市差異 | House+ 好時價</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root{
+      --primary-color:#2c5aa0;
+      --secondary-color:#4a90e2;
+      --accent-color:#ff6b6b;
+      --text-dark:#2d3748;
+      --text-light:#4a5568;
+      --bg-light:#f7fafc;
+      --bg-white:#ffffff;
+      --border-color:#e2e8f0;
+      --gradient-start:#667eea;
+      --gradient-end:#764ba2;
+    }
+
+    body{
+      font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;
+      line-height:1.6;
+      color:var(--text-light);
+      background-color:var(--bg-light);
+      overflow-x:hidden;
+    }
+
+    header{
+      background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+      padding:1rem 0;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+
+    .header-container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 2rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+
+    .logo{
+      font-size:1.8rem;
+      font-weight:900;
+      color:white;
+      text-decoration:none;
+      font-family:'Noto Serif TC',serif;
+      letter-spacing:1px;
+      white-space:nowrap;
+    }
+
+    .nav-link{
+      color:rgba(255,255,255,0.9);
+      text-decoration:none;
+      font-weight:600;
+      font-size:0.95rem;
+      padding:0.4rem 0.8rem;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      transition:all 0.25s;
+      white-space:nowrap;
+    }
+    .nav-link:hover{ background:rgba(255,255,255,0.12); }
+
+    .hero{
+      background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1));
+      padding:2rem 1rem;
+      border-bottom:3px solid var(--primary-color);
+    }
+
+    .hero-inner{
+      max-width:900px;
+      margin:0 auto;
+      padding:0 2rem;
+    }
+
+    .hero h1{
+      font-size:1.6rem;
+      font-weight:900;
+      color:var(--text-dark);
+      margin-bottom:0.5rem;
+      font-family:'Noto Serif TC',serif;
+      line-height:1.4;
+      text-align:left;
+    }
+
+    .last-updated{
+      color:var(--text-light);
+      font-size:0.85rem;
+      opacity:0.7;
+      text-align:left;
+    }
+
+    .container{
+      max-width:900px;
+      margin:3rem auto;
+      padding:0 2rem;
+    }
+
+    .toc{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin-bottom:3rem;
+      box-shadow:0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .toc h3{
+      color:var(--primary-color);
+      font-size:1.3rem;
+      margin-bottom:1rem;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+    }
+    .toc h3::before{ content:"📋"; font-size:1.5rem; }
+
+    .toc ul{ list-style:none; }
+    .toc li{
+      margin:0.8rem 0;
+      padding-left:1.5rem;
+      position:relative;
+    }
+    .toc li::before{
+      content:"▸";
+      position:absolute;
+      left:0;
+      color:var(--secondary-color);
+      font-weight:bold;
+    }
+    .toc a{
+      color:var(--text-dark);
+      text-decoration:none;
+      transition:color 0.3s;
+      font-weight:500;
+    }
+    .toc a:hover{ color:var(--primary-color); }
+
+    .article-content{
+      background:var(--bg-white);
+      padding:3rem;
+      border-radius:12px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom:2rem;
+    }
+
+    .intro-text{
+      font-size:1.05rem;
+      line-height:1.7;
+      color:var(--text-dark);
+      margin-bottom:1.5rem;
+      padding:1.5rem;
+      background:linear-gradient(135deg,rgba(102,126,234,0.05),rgba(118,75,162,0.05));
+      border-left:4px solid var(--primary-color);
+      border-radius:8px;
+    }
+
+    h2{
+      font-size:1.5rem;
+      font-weight:700;
+      color:var(--text-dark);
+      margin:2rem 0 1rem;
+      font-family:'Noto Serif TC',serif;
+      position:relative;
+      padding-bottom:0.5rem;
+    }
+    h2::after{
+      content:"";
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:50px;
+      height:3px;
+      background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));
+      border-radius:2px;
+    }
+
+    p{ margin-bottom:1rem; line-height:1.7; }
+
+    .highlight-box{
+      background:linear-gradient(135deg,#f6f8fb,#e9f0f7);
+      border-left:5px solid var(--secondary-color);
+      padding:1.5rem 2rem;
+      margin:2rem 0;
+      border-radius:8px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+    .highlight-box p:last-child{ margin-bottom:0; }
+
+    .feature-list{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+
+    .feature-list h4{
+      color:var(--primary-color);
+      font-size:1.2rem;
+      margin-bottom:1rem;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+    }
+
+    .feature-list ul{ list-style:none; }
+    .feature-list li{
+      padding:0.8rem 0 0.8rem 2.5rem;
+      position:relative;
+      border-bottom:1px solid var(--border-color);
+    }
+    .feature-list li:last-child{ border-bottom:none; }
+
+    .feature-list li::before{
+      content:"✓";
+      position:absolute;
+      left:0;
+      color:#48bb78;
+      font-weight:bold;
+      font-size:1.2rem;
+      background:rgba(72,187,120,0.1);
+      width:1.8rem;
+      height:1.8rem;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .feature-list.negative li::before{
+      content:"✗";
+      color:#f56565;
+      background:rgba(245,101,101,0.1);
+    }
+
+    .info-box{
+      background:linear-gradient(135deg,#fff5f5,#ffe5e5);
+      border:2px solid #feb2b2;
+      border-radius:12px;
+      padding:1.5rem 2rem;
+      margin:2rem 0;
+    }
+    .info-box strong{ color:#c53030; font-size:1.1rem; }
+
+    .cta-box{
+      background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+      color:white;
+      padding:2.5rem;
+      border-radius:12px;
+      text-align:center;
+      margin:3rem 0;
+      box-shadow:0 10px 30px rgba(102,126,234,0.3);
+    }
+    .cta-box h3{
+      color:white;
+      font-size:1.8rem;
+      margin-bottom:1rem;
+      font-family:'Noto Serif TC',serif;
+    }
+    .cta-box p{ margin-bottom:1.5rem; opacity:0.95; }
+
+    .related-links{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+    .related-links h3{ color:var(--primary-color); margin-bottom:1.5rem; }
+    .related-links ul{ list-style:none; }
+    .related-links li{
+      margin:1rem 0;
+      padding-left:1.5rem;
+      position:relative;
+    }
+    .related-links li::before{
+      content:"→";
+      position:absolute;
+      left:0;
+      color:var(--secondary-color);
+      font-weight:bold;
+    }
+    .related-links a{
+      color:var(--secondary-color);
+      text-decoration:none;
+      font-weight:500;
+      transition:color 0.3s;
+    }
+    .related-links a:hover{
+      color:var(--primary-color);
+      text-decoration:underline;
+    }
+
+    footer{
+      background:var(--text-dark);
+      color:white;
+      padding:3rem 2rem 2rem;
+      margin-top:4rem;
+    }
+    .footer-content{
+      max-width:1200px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .footer-content p{ opacity:0.8; margin-bottom:0.5rem; }
+    .footer-brand{
+      font-size:1.5rem;
+      font-weight:700;
+      margin-bottom:1rem;
+      font-family:'Noto Serif TC',serif;
+    }
+
+    @media (max-width: 768px){
+      .hero{ padding:1.5rem 1rem; }
+      .hero-inner{ padding:0 1rem; }
+      .hero h1{ font-size:1.4rem; }
+      .container{ padding:0 1rem; margin:1.5rem auto; }
+      .article-content{ padding:1.5rem 1rem; }
+      .toc{ padding:1.5rem 1rem; }
+      h2{ font-size:1.3rem; }
+      .feature-list{ padding:1.5rem 1rem; }
+      .highlight-box{ padding:1rem 1.5rem; }
+      .cta-box{ padding:1.5rem 1rem; }
+      .cta-box h3{ font-size:1.3rem; }
+    }
+
+    html{ scroll-behavior:smooth; }
+
+    @keyframes fadeInUp{
+      from{ opacity:0; transform:translateY(30px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    .article-content > *{ animation: fadeInUp 0.6s ease-out; }
+  </style>
 </head>
+
 <body>
-    <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">House+好時價 insight</a>
-        </div>
-    </header>
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo">House+ 好時價</a>
+      <a class="nav-link" href="index.html">回到文章列表</a>
+    </div>
+  </header>
 
-    <section class="hero">
-        <div class="container">
-            <a href="index.html" class="back-link">返回文章列表</a>
-            <h1>為什麼預售屋行情常被視為房市的先期指標？</h1>
-            <p class="last-updated">最後更新時間：2025年2月</p>
-        </div>
-    </section>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>為什麼住宅與商辦必須分開估價？從模型設計看房市差異</h1>
+      <p class="last-updated">最後更新時間：2025年2月</p>
+    </div>
+  </section>
 
-    <div class="container">
-        <div class="toc">
-            <h3>文章目錄</h3>
-            <ul>
-                <li><a href="#section1">為什麼市場會關注預售屋？</a></li>
-                <li><a href="#section2">什麼是「先期指標」？</a></li>
-                <li><a href="#section3">預售屋為什麼能比成屋更早反應市場？</a></li>
-                <li><a href="#section4">為什麼「預售成交量」比「預售價格」更重要？</a></li>
-                <li><a href="#section5">預售屋作為先期指標，有哪些限制？</a></li>
-                <li><a href="#section6">為什麼預售屋常與成交量、房價指數一起看？</a></li>
-                <li><a href="#section7">House+ 的實務觀點</a></li>
-                <li><a href="#section8">延伸閱讀</a></li>
-                <li><a href="#section9">房價指數是什麼？為什麼不同指數會給出不同答案</a></li>
-                <li><a href="#section10">為什麼住宅與商辦必須分開估價？</a></li>
-                <li><a href="#section11">資料整理說明</a></li>
-            </ul>
-        </div>
-
-        <article class="article-content">
-            <section id="section1">
-                <h2>為什麼市場會關注預售屋？</h2>
-                <p>在房市討論中，預售屋經常被拿來作為「風向球」，甚至被稱為市場的先期指標。
-這並不是因為預售屋一定比較好或比較壞，而是因為它 出現在交易流程的最前端。</p>
-
-                <p>簡單來說，預售屋反映的是 買方「現在此刻」對未來房市的信心與預期，而不是對既有存量的評價。</p>
-
-            </section>
-
-            <section id="section2">
-                <h2>什麼是「先期指標」？</h2>
-                <p>所謂先期指標，指的是在整體市場變化發生之前，率先出現變動的數據或現象。</p>
-
-                <p>在房市中：</p>
-
-                <p>成交價格通常 最後才反應</p>
-
-                <p>成交量多半 先於價格變化</p>
-
-                <p>預售市場，則往往 更早出現變化</p>
-
-                <p>因此，預售屋並不是用來判斷「現在房價貴不貴」，而是用來觀察：</p>
-
-                <p>市場對未來一到兩年的房市，態度是否正在改變。</p>
-
-            </section>
-
-            <section id="section3">
-                <h2>預售屋為什麼能比成屋更早反應市場？</h2>
-                <p>預售屋具有幾個與成屋市場不同的特性，讓它更容易成為先期指標。</p>
-
-                <div class="method-cards">
-                    <div class="method-card">
-                        <h4><span class="label">1️⃣</span> 交易決策完全基於「預期」</h4>
-                        <p>預售屋在簽約時，房屋尚未完工，買方購買的並不是現況，而是：</p>
-                        <p>對未來房價走勢的判斷</p>
-                        <p>對自身財務與貸款環境的預期</p>
-                        <p>對政策與市場風險的看法</p>
-                        <p>當市場信心轉弱時，買方會 直接延後或取消進場，使預售成交量率先下降。</p>
-                    </div>
-                    <div class="method-card">
-                        <h4><span class="label">2️⃣</span> 預售價格調整彈性較高</h4>
-                        <p>相較於成屋市場，預售市場的價格形成方式更具彈性：</p>
-                        <p>開發商可透過調整銷售節奏、優惠條件因應市場</p>
-                        <p>不必立刻反映在實際登錄價格上</p>
-                        <p>成交量的變化，往往比價格更快出現</p>
-                        <p>因此，在市場轉折初期，常見的現象是：</p>
-                        <p>預售成交量先下滑，價格仍維持高檔。</p>
-                    </div>
-                    <div class="method-card">
-                        <h4><span class="label">3️⃣</span> 預售市場對政策與金融環境高度敏感</h4>
-                        <p>預售屋交易涉及：</p>
-                        <p>未來交屋時的房貸條件</p>
-                        <p>長期利率與信用管制預期</p>
-                        <p>政策風險的提前反應</p>
-                        <p>當利率上升、信用政策趨嚴時，即使成屋市場尚未出現明顯變化，預售市場往往已率先降溫。</p>
-                    </div>
-                </div>
-
-            </section>
-
-            <section id="section4">
-                <h2>為什麼「預售成交量」比「預售價格」更重要？</h2>
-                <p>在解讀預售市場時，成交量通常比價格更具參考價值。</p>
-
-                <p>原因在於：</p>
-
-                <p>預售價格具有高度策略性，短期不易調整</p>
-
-                <p>成交量直接反映買方是否願意進場</p>
-
-                <p>成交量萎縮，代表市場參與者正在觀望</p>
-
-                <p>因此，若觀察到：</p>
-
-                <p>預售成交量持續下滑</p>
-
-                <p>成屋成交量同步轉弱</p>
-
-                <p>房價指數仍維持高檔</p>
-
-                <p>通常代表市場正在進入 盤整或修正前期，而非價格已全面反轉。</p>
-
-            </section>
-
-            <section id="section5">
-                <h2>預售屋作為先期指標，有哪些限制？</h2>
-                <p>雖然預售屋具有先期性，但並非萬用指標，也有其限制。</p>
-
-                <p>預售屋不適合用來：</p>
-
-                <p>判斷短期房價漲跌</p>
-
-                <p>直接推估成屋成交價格</p>
-
-                <p>單獨作為市場結論依據</p>
-
-                <p>此外，預售市場本身也會受到：</p>
-
-                <p>推案時程集中或延後</p>
-
-                <p>個別大型建案影響</p>
-
-                <p>區域供給結構差異</p>
-
-                <p>因此，預售數據必須 搭配其他指標交叉解讀，才能避免過度解讀。</p>
-
-            </section>
-
-            <section id="section6">
-                <h2>為什麼預售屋常與成交量、房價指數一起看？</h2>
-                <p>在實務分析中，預售屋通常會與下列指標同時觀察：</p>
-
-                <p>預售成交量：市場信心是否轉變</p>
-
-                <p>成屋成交量：實際交易動能是否跟進</p>
-
-                <p>房價指數：價格是否開始反映變化</p>
-
-                <p>這三者的組合，有助於判斷市場目前位於：</p>
-
-                <p>初期轉弱</p>
-
-                <p>高檔盤整</p>
-
-                <p>或修正階段</p>
-
-                <p>而非僅憑單一數據下結論。</p>
-
-            </section>
-
-            <section id="section7">
-                <h2>House+ 的實務觀點</h2>
-                <p>在 House+ 的房市分析中，預售屋被視為 市場情緒與預期的觀察窗口，而非價格預測工具。</p>
-
-                <p>我們關注的不是單一建案的價格表現，而是：</p>
-
-                <p>預售成交量的變化方向</p>
-
-                <p>與成屋市場是否出現連動</p>
-
-                <p>是否與利率、政策環境同步變化</p>
-
-                <p>透過公開資料與一致的解讀邏輯，避免將短期波動誤認為趨勢反轉。</p>
-
-            </section>
-
-            <section id="section8">
-                <h2>延伸閱讀</h2>
-            </section>
-
-            <section id="section9">
-                <h2>房價指數是什麼？為什麼不同指數會給出不同答案</h2>
-                <p>房市指標快照：每月預售與成交量變化整理</p>
-
-            </section>
-
-            <section id="section10">
-                <h2>為什麼住宅與商辦必須分開估價？</h2>
-            </section>
-
-            <section id="section11">
-                <h2>資料整理說明</h2>
-                <p>本文為房市制度與市場機制說明，內容以公開資料與實務經驗整理，不涉及個別建案或價格推估。</p>
-
-                <p>資料整理：House+ 好時價</p>
-
-            </section>
-
-        </article>
+  <div class="container">
+    <!-- Table of Contents -->
+    <div class="toc">
+      <h3>文章目錄</h3>
+      <ul>
+        <li><a href="#why-mix-bad">為什麼「混在一起算」會出問題？</a></li>
+        <li><a href="#differences">住宅與商辦，差異在哪裡？</a></li>
+        <li><a href="#benefits">從模型角度看，分模型有什麼好處？</a></li>
+        <li><a href="#precision">分模型是否代表結果「更精準」？</a></li>
+        <li><a href="#indicators">分模型與房市指標、差異分析的關係</a></li>
+        <li><a href="#houseplus">House+ 的實務觀點</a></li>
+      </ul>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-brand">House+好時價 insight</div>
-            <p>專業房市數據分析平台</p>
-            <p>&copy; 2025 House+. All rights reserved.</p>
+    <!-- Main Article -->
+    <article class="article-content">
+      <section id="why-mix-bad">
+        <h2>為什麼「混在一起算」會出問題？</h2>
+        <div class="intro-text">
+          在討論房市價格或估價模型時，一個常見的誤解是：只要都是不動產，就可以用同一套模型來估算。但在實務與制度上，住宅與商辦（辦公室、商用不動產）本質上就是兩個不同的市場。若強行混合建模，反而會降低估價結果的解釋力與可靠度。
+          <br><br>
+          因此，是否分模型，並不是技術選擇，而是<strong>對市場結構的基本尊重</strong>。
         </div>
-    </footer>
+      </section>
+
+      <section id="differences">
+        <h2>住宅與商辦，差異在哪裡？</h2>
+
+        <div class="feature-list">
+          <h4>1️⃣ 價格形成邏輯不同</h4>
+          <ul>
+            <li><strong>住宅市場</strong>：生活機能、學區、通勤、社區品質等因素影響大；以<strong>自住需求</strong>為主，投資為輔；對利率與貸款條件高度敏感。</li>
+            <li><strong>商辦市場</strong>：核心來自租金水準、空置率、產業聚集；以投資與企業使用需求為主；更關注<strong>長期現金流</strong>與區位發展。</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>👉 若用同一套模型解釋兩者，勢必忽略關鍵因素。</strong></p>
+        </div>
+
+        <div class="feature-list">
+          <h4>2️⃣ 影響價格的變數本來就不同</h4>
+          <ul>
+            <li><strong>住宅常見關鍵變數</strong>：樓層、屋齡、坪數、學區、生活圈</li>
+            <li><strong>商辦常見關鍵變數</strong>：租金水準、商業密度、交通節點、產業分布</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <p><strong>混合建模常導致：</strong></p>
+          <p>住宅模型引入「無意義的商用變數」、商辦模型被住宅樣本稀釋；結果不是「平均」，而是<strong>失真</strong>。</p>
+        </div>
+
+        <div class="feature-list">
+          <h4>3️⃣ 交易行為與市場節奏不同</h4>
+          <ul>
+            <li>住宅市場波動較頻繁，受政策與金融環境影響顯著</li>
+            <li>商辦市場調整較慢，但一旦反轉，影響時間較長</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <p>即使在同一時間點，住宅與商辦也可能處於不同的市場階段。混合模型會掩蓋這種<strong>結構性差異</strong>。</p>
+        </div>
+      </section>
+
+      <section id="benefits">
+        <h2>從模型角度看，分模型有什麼好處？</h2>
+
+        <div class="feature-list">
+          <h4>✔️ 提升估價結果的解釋力</h4>
+          <ul>
+            <li>住宅模型 → 解釋住宅價格變化</li>
+            <li>商辦模型 → 解釋商用不動產價值</li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>✔️ 降低系統性誤差</h4>
+          <ul>
+            <li>避免高價商辦拉高整體估值</li>
+            <li>避免住宅樣本過多，壓縮商辦模型效果</li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>✔️ 符合國際實務與制度設計</h4>
+          <ul>
+            <li>多數國家依用途別建立不同模型：住宅、商辦、商業設施、工業不動產等</li>
+            <li>這不是複雜化，而是為了提高制度可用性與政策解釋力</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="precision">
+        <h2>分模型是否代表結果「更精準」？</h2>
+        <p>需要釐清的是：分模型不是為了追求某一筆估價「更漂亮」，而是為了：</p>
+
+        <div class="feature-list">
+          <ul>
+            <li>更清楚地解釋市場</li>
+            <li>更一致地解讀趨勢</li>
+            <li>更穩定地支持政策與分析需求</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>估價模型的價值，在於可解釋性與一致性，而非單點誤差最小。</strong></p>
+        </div>
+      </section>
+
+      <section id="indicators">
+        <h2>分模型與房市指標、差異分析的關係</h2>
+        <p>在實務應用中，分模型設計有助於：</p>
+
+        <div class="feature-list">
+          <ul>
+            <li>建立用途別房價指數</li>
+            <li>進行住宅與商辦的趨勢比較</li>
+            <li>支援差異分析與區域比較報表</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <p><strong>也能避免對外說明時出現：</strong>「為什麼這個區域價格看起來怪怪的？」</p>
+        </div>
+      </section>
+
+      <section id="houseplus">
+        <h2>House+ 的實務觀點</h2>
+        <p>在 House+ 的模型設計與資料整理中，我們的基本原則是：</p>
+
+        <div class="feature-list">
+          <ul>
+            <li>依用途別建模，而非為了方便而合併</li>
+            <li>讓模型回答清楚的問題，而不是包山包海</li>
+            <li>讓每一個數據結果，都能被合理解釋</li>
+          </ul>
+        </div>
+
+        <p>透過這樣的設計，確保公開資料在不同分析場景中，能被正確使用與理解。</p>
+      </section>
+    </article>
+
+    <!-- CTA Box -->
+    <div class="cta-box">
+      <h3>想用一致的方法論看懂市場差異？</h3>
+      <p>訂閱 House+ 電子報：每月整理房市指標與差異分析重點，幫你快速掌握趨勢</p>
+    </div>
+
+    <!-- Related Links -->
+    <div class="related-links">
+      <h3>延伸閱讀</h3>
+      <ul>
+        <li><a href="Article1.html">房價指數是什麼？為什麼不同指數會給出不同答案</a></li>
+        <li><a href="article2.html">為什麼預售屋行情常被視為房市的先期指標？</a></li>
+        <li><a href="article4.html">系統估價在房市分析中的角色與限制</a></li>
+      </ul>
+    </div>
+
+    <!-- Data Source -->
+    <div class="article-content" style="margin-top: 2rem; padding: 1.5rem;">
+      <h3>資料整理說明</h3>
+      <p>本文為不動產估價模型與市場結構之說明，內容以公開資料與通行實務為基礎，不涉及個別物件估價。</p>
+      <p><strong>資料整理：House+ 好時價</strong></p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">House+ 好時價</div>
+      <p>專業房市數據分析平台</p>
+      <p>&copy; 2025 House+. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
