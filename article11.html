@@ -318,6 +318,32 @@
     }
     .info-box strong{ color:#c53030; font-size:1.05rem; }
 
+    /* ✅ 圖片樣式：與文章卡片風格一致 */
+    figure.media{
+      margin:1.5rem 0 2rem;
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      background:var(--bg-white);
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+      overflow:hidden;
+    }
+    figure.media img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    figure.media figcaption{
+      padding:0.9rem 1rem;
+      font-size:0.9rem;
+      color:var(--text-light);
+      border-top:1px solid var(--border-color);
+      line-height:1.6;
+    }
+    figure.media figcaption strong{
+      color:var(--text-dark);
+      font-weight:800;
+    }
+
     .cta-box{
       background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
       color:white;
@@ -505,6 +531,18 @@
           <p style="margin-bottom:0;">六都及新竹地區全面下滑，其中中南部修正幅度更大，北部相對抗跌。</p>
         </div>
 
+        <!-- ✅ 圖1：六都房價指數年變動（放這裡最順） -->
+        <figure class="media">
+          <img
+            src="20251127_price_index_yoy.png"
+            alt="六大都會區2025年10月房價指數年變動"
+            loading="lazy"
+          />
+          <figcaption>
+            <strong>圖 1｜</strong>六大都會區 2025 年 10 月房價指數年變動（%）。可見中南部修正幅度較大，北部相對抗跌。
+          </figcaption>
+        </figure>
+
         <div class="feature-list">
           <h4>六都與新竹：修正較明顯的城市（摘要）</h4>
           <ul>
@@ -552,6 +590,18 @@
           值得注意的是，儘管成交量大幅下滑，2025Q2 的預售價格端並未明顯鬆動。
           House+ 統計預售屋單價中位數表現，多數城市仍呈年增，僅台北市略為修正但仍站穩高點。
         </p>
+
+        <!-- ✅ 圖2：預售單價（放在這裡支撐「價穩」敘事） -->
+        <figure class="media">
+          <img
+            src="20251127_presale_price_q2.png"
+            alt="2024Q2 vs 2025Q2 預售屋交易單價比較"
+            loading="lazy"
+          />
+          <figcaption>
+            <strong>圖 2｜</strong>2024Q2 vs 2025Q2 六都預售屋交易單價比較（萬元/坪）。在量縮背景下，價格端多數城市仍呈相對黏著。
+          </figcaption>
+        </figure>
 
         <div class="feature-list">
           <h4>預售屋單價中位數（年增率，摘要）</h4>
@@ -613,8 +663,8 @@
       <h3>延伸閱讀（Insights）</h3>
       <ul>
         <li><a href="article9.html">交通建設帶動房市上揚，新北市蛋白區房價漲幅明顯超越蛋黃區</a></li>
-        <li><a href="article10.html">景氣亮紅燈，房市卻退燒？房市量縮盤整，價格分化浮現</a></li>
-        <li><a href="article5.html">為什麼不能只看平均房價？從價格分布看市場風險</a></li>
+        <li><a href="article10.html">news景氣亮紅燈，房市卻退燒？房市量縮盤整，價格分化浮現</a></li>
+        <li><a href="myhouse.html">查看我的房子</a></li>
       </ul>
     </div>
 
