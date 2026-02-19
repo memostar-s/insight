@@ -1,325 +1,379 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LINE 分享卡片｜截圖用</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>🏠 你家的房價月報｜House+ 我的房子</title>
 
-body {
-  font-family: 'Noto Sans TC', sans-serif;
-  background: #EDEDED;
-  min-height: 100vh;
+<!-- LINE / OG Preview Tags（注意：OG 只會抓「第一張」預覽圖/標題描述；此頁內可顯示兩張卡片沒問題） -->
+<meta property="og:title"       content="🏠 你家的房價月報｜House+ 我的房子">
+<meta property="og:description" content="House+ 每月自動幫你追蹤房價變化：不用自己記、不用天天查。點我看第一筆紀錄 👇">
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://memostar-s.github.io/insight/share.html">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="🏠 你家的房價月報｜House+ 我的房子">
+<meta name="twitter:description" content="House+ 每月自動幫你追蹤房價變化：不用自己記、不用天天查。點我看第一筆紀錄 👇">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; font-family: 'Noto Sans TC', sans-serif; background: #F2F2F2; }
+body { padding: 22px 16px 28px; }
+
+/* ── layout ── */
+.wrap {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
   gap: 14px;
+  animation: fadeIn .5s ease both;
 }
 
-.hint {
-  font-size: 11px;
-  color: #AAAAAA;
-  letter-spacing: 1px;
-  text-align: center;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ━━━━━━━━━━━━━━━━━━━
-   SHARE CARD
-   ━━━━━━━━━━━━━━━━━━━ */
+/* ── CARD ── */
 .card {
-  width: 360px;
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
-  font-family: 'Noto Sans TC', sans-serif;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  background: #fff;
 }
 
-/* ── Hero ── */
+/* small label between cards */
+.section-label {
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 6px 4px 2px;
+  color: #9AA0A6;
+  font-size: 11px;
+}
+.section-label b { color: #6B7280; font-weight: 900; }
+.pill-mini{
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,107,26,0.10);
+  color: #FF6B1A;
+  font-weight: 800;
+}
+
+/* ── HERO (shared) ── */
 .hero {
   background: linear-gradient(120deg, #FF6B1A 0%, #FF9A2E 58%, #FFB830 100%);
-  padding: 24px 24px 20px;
+  padding: 24px 22px 20px;
   position: relative;
   overflow: hidden;
 }
-
-.hero::before {
-  content: '';
-  position: absolute; top: -50px; right: -50px;
-  width: 180px; height: 180px;
+.hero::before{
+  content:'';
+  position:absolute; top:-50px; right:-50px;
+  width:180px; height:180px;
   background: rgba(255,255,255,0.09);
-  border-radius: 50%;
+  border-radius:50%;
 }
-.hero::after {
-  content: '';
-  position: absolute; bottom: -30px; left: -30px;
-  width: 120px; height: 120px;
+.hero::after{
+  content:'';
+  position:absolute; bottom:-30px; left:-30px;
+  width:120px; height:120px;
   background: rgba(255,255,255,0.06);
-  border-radius: 50%;
+  border-radius:50%;
 }
 
-.hero-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
+.hero-brand{
+  display:flex; align-items:center; gap:10px;
+  margin-bottom: 14px;
   position: relative; z-index: 1;
 }
-
-.brand-icon {
-  width: 38px; height: 38px;
+.brand-icon{
+  width:40px; height:40px;
   background: rgba(255,255,255,0.22);
-  border-radius: 11px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
+  border-radius: 12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px;
 }
-
-.brand-texts { display: flex; flex-direction: column; gap: 1px; }
-.brand-name {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700; font-size: 16px;
-  color: white; letter-spacing: -0.3px; line-height: 1.1;
+.brand-texts{ display:flex; flex-direction:column; gap:1px; }
+.brand-name{
+  font-family:'DM Sans', sans-serif;
+  font-weight:700; font-size:17px;
+  color:#fff; letter-spacing:-0.3px; line-height:1.1;
 }
-.brand-sub { font-size: 10.5px; color: rgba(255,255,255,0.82); font-weight: 500; }
-
-.ai-badge {
-  margin-left: auto;
+.brand-sub{ font-size:11px; color: rgba(255,255,255,0.82); font-weight:500; }
+.ai-badge{
+  margin-left:auto;
   background: rgba(255,255,255,0.2);
   border: 1px solid rgba(255,255,255,0.3);
-  color: white; font-size: 10px; font-weight: 600;
-  padding: 3px 10px; border-radius: 20px;
-  display: flex; align-items: center; gap: 5px;
-  white-space: nowrap;
+  color:#fff; font-size:10px; font-weight:800;
+  padding: 4px 10px; border-radius: 20px;
+  display:flex; align-items:center; gap:6px;
+  white-space:nowrap;
 }
-.live-dot {
-  width: 5px; height: 5px;
-  background: #7AFF9E; border-radius: 50%;
+.live-dot{
+  width:6px; height:6px; background:#7AFF9E; border-radius:50%;
   animation: blink 1.8s infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.hero-addr {
-  color: rgba(255,255,255,0.78);
-  font-size: 11.5px;
-  margin-bottom: 8px;
+/* ── card1 (message) ── */
+.hero-title{
+  font-family:'DM Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color:#fff;
+  letter-spacing: -0.8px;
+  line-height: 1.12;
   position: relative; z-index: 1;
 }
+.hero-msg{
+  margin-top: 10px;
+  color: rgba(255,255,255,0.88);
+  font-size: 13px;
+  line-height: 1.7;
+  position: relative; z-index: 1;
+}
+.hero-msg b{ color:#fff; font-weight: 900; }
+.pill-row{
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin-top: 12px;
+  position: relative; z-index: 1;
+}
+.pill{
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.22);
+  color:#fff;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display:flex; align-items:center; gap:6px;
+}
 
+/* ── card2 (price summary) ── */
+.hero-addr {
+  color: rgba(255,255,255,0.84);
+  font-size: 12px;
+  margin-top: 2px;
+  position: relative; z-index: 1;
+}
 .hero-price {
   font-family: 'DM Sans', sans-serif;
-  font-size: 44px; font-weight: 700;
+  font-size: 46px; font-weight: 700;
   color: white; line-height: 1.05; letter-spacing: -2px;
+  margin-top: 10px;
   position: relative; z-index: 1;
 }
-.hero-price .unit { font-size: 20px; font-weight: 500; opacity: 0.88; letter-spacing: 0; }
-
+.hero-price .unit { font-size: 20px; font-weight: 600; opacity: 0.9; letter-spacing: 0; }
 .hero-detail {
-  color: rgba(255,255,255,0.75);
-  font-size: 11.5px; margin-top: 6px;
+  color: rgba(255,255,255,0.80);
+  font-size: 12px;
+  margin-top: 6px;
   position: relative; z-index: 1;
 }
-.hero-detail .sep { margin: 0 6px; opacity: 0.5; }
+.hero-detail .sep { margin: 0 7px; opacity: 0.45; }
 
-/* ── Stats ── */
-.stats {
-  background: white;
-  display: flex;
-}
-
+/* stats */
+.stats { background: white; display: flex; }
 .stat {
-  flex: 1;
-  padding: 15px 0 13px;
-  display: flex; flex-direction: column;
-  align-items: center; gap: 4px;
+  flex: 1; padding: 14px 0 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
   position: relative;
 }
 .stat + .stat::before {
-  content: ''; position: absolute;
-  left: 0; top: 12%; height: 76%; width: 1px; background: #F0F0F0;
+  content: ''; position: absolute; left: 0; top: 12%; height: 76%;
+  width: 1px; background: #F0F0F0;
 }
-
 .stat-val {
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px; font-weight: 700; line-height: 1;
-  color: #1A1A1A;
+  font-size: 14px; font-weight: 800; line-height: 1; color: #1A1A1A;
 }
-.stat-val.up    { color: #22C55E; }
-.stat-val.orange{ color: #FF6B1A; }
-
+.stat-val.up { color: #22C55E; }
+.stat-val.orange { color: #FF6B1A; }
 .stat-label { font-size: 10px; color: #AAAAAA; }
 
-/* ── Mini chart ── */
+/* chart */
 .chart-band {
   background: #FAFAFA;
   border-top: 1px solid #F0F0F0;
-  padding: 13px 20px 11px;
+  padding: 14px 18px 12px;
 }
-
 .chart-meta {
   display: flex; justify-content: space-between;
   font-size: 10px; color: #BBBBBB; margin-bottom: 8px;
 }
-.chart-meta span { color: #FF6B1A; font-weight: 600; }
+.chart-meta span { color: #FF6B1A; font-weight: 800; }
+.mini-svg { width: 100%; height: 46px; }
 
-.mini-svg { width: 100%; height: 44px; }
-
-/* ── CTA ── */
-.cta {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 15px 22px;
+/* CTA */
+.cta-btn {
+  display:flex; align-items:center; justify-content: space-between;
+  padding: 16px 20px;
   background: linear-gradient(110deg, #FF6B1A 0%, #FF9A2E 58%, #FFB830 100%);
-  text-decoration: none;
+  text-decoration:none;
+  border:none; width:100%;
+  font-family:'Noto Sans TC', sans-serif;
+  cursor:pointer;
+  transition: filter 0.18s;
 }
-.cta-label { color: white; font-size: 14.5px; font-weight: 700; letter-spacing: 0.3px; }
+.cta-btn:active { filter: brightness(0.92); }
+
+.cta-left { display:flex; flex-direction: column; }
+.cta-label { color:#fff; font-size: 15px; font-weight: 900; letter-spacing: 0.2px; }
+.cta-sub { margin-top: 2px; font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 700; }
 .cta-arrow {
-  width: 30px; height: 30px;
-  background: rgba(255,255,255,0.25); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  color: white; font-size: 16px; font-weight: 700;
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size: 18px; font-weight: 900;
 }
 
-/* Copy hint */
-.copy-section {
-  width: 360px;
-  background: white;
-  border-radius: 14px;
-  padding: 16px 18px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* footer */
+.footer-note {
+  text-align:center;
+  font-size: 11px;
+  color: #A8A8A8;
+  line-height: 1.6;
+  margin-top: 2px;
 }
-
-.copy-label {
-  font-size: 11px; color: #999; font-weight: 500;
-}
-
-.url-row {
-  display: flex; gap: 8px; align-items: center;
-}
-
-.url-text {
-  flex: 1;
-  background: #F8F8F8; border: 1px solid #EEEEEE;
-  border-radius: 8px; padding: 8px 12px;
-  font-size: 11px; color: #FF6B1A; font-family: monospace;
-  word-break: break-all; line-height: 1.4;
-}
-
-.copy-btn {
-  background: linear-gradient(110deg, #FF6B1A, #FFB830);
-  color: white; font-size: 12px; font-weight: 700;
-  border: none; border-radius: 8px;
-  padding: 8px 14px; cursor: pointer;
-  white-space: nowrap; font-family: 'Noto Sans TC', sans-serif;
-  transition: opacity 0.2s;
-}
-.copy-btn:active { opacity: 0.8; }
-.copy-btn.ok { background: #22C55E; }
 </style>
 </head>
+
 <body>
+<div class="wrap">
 
-<div class="hint">▼ 截圖此卡片貼到 LINE</div>
+  <!-- ─────────────────────────────
+       CARD 1：提醒／導回（你要的新通知內容）
+  ───────────────────────────── -->
+  <div class="section-label">
+    <b>本月提醒</b>
+    <span class="pill-mini">NEW</span>
+  </div>
 
-<!-- ─── THE CARD ─── -->
-<div class="card">
-
-  <div class="hero">
-    <div class="hero-brand">
-      <div class="brand-icon">🏠</div>
-      <div class="brand-texts">
-        <div class="brand-name">HousePlus</div>
-        <div class="brand-sub">我的房子</div>
+  <div class="card">
+    <div class="hero">
+      <div class="hero-brand">
+        <div class="brand-icon">🏠</div>
+        <div class="brand-texts">
+          <div class="brand-name">House+</div>
+          <div class="brand-sub">我的房子</div>
+        </div>
+        <div class="ai-badge"><span class="live-dot"></span>每月追蹤</div>
       </div>
-      <div class="ai-badge">
-        <span class="live-dot"></span>AI 即時估價
+
+      <div class="hero-title">你家的房價<br>我幫你每月記一筆</div>
+
+      <div class="hero-msg">
+        🏠 你好！House+ 每月幫你追蹤<b>「你家的房價變化」</b><br>
+        不用自己記、不用天天來查，一打開就看到最新進度。
+      </div>
+
+      <div class="pill-row">
+        <div class="pill">📌 自動留存紀錄</div>
+        <div class="pill">📈 變化一眼懂</div>
+        <div class="pill">🔔 每月提醒</div>
       </div>
     </div>
 
-    <div class="hero-addr">📍 新北市淡水區新市一路三段108號</div>
-
-    <div class="hero-price">1,268 <span class="unit">萬元</span></div>
-
-    <div class="hero-detail">
-      單價 25.3 萬元／坪
-      <span class="sep">|</span>
-      車位價 120 萬元
-    </div>
+    <a class="cta-btn" href="https://memostar-s.github.io/insight/myhouse.html">
+      <span class="cta-left">
+        <span class="cta-label">👉 查看我家的第一筆紀錄</span>
+        <span class="cta-sub">點一下回到「我的房子」</span>
+      </span>
+      <span class="cta-arrow">›</span>
+    </a>
   </div>
 
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-val up">↑ +1.3%</div>
-      <div class="stat-label">較上月</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val orange">+3.1%</div>
-      <div class="stat-label">高於區域</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val">1,230萬</div>
-      <div class="stat-label">淡水區平均</div>
-    </div>
+  <!-- ─────────────────────────────
+       CARD 2：估價摘要（保留你原本的卡片形式）
+  ───────────────────────────── -->
+  <div class="section-label">
+    <b>最新估價摘要</b>
+    <span class="pill-mini">6M</span>
   </div>
 
-  <div class="chart-band">
-    <div class="chart-meta">
-      近 6 個月房價走勢
-      <span>2026.2.19 更新</span>
+  <div class="card">
+
+    <div class="hero">
+      <div class="hero-brand">
+        <div class="brand-icon">🏠</div>
+        <div class="brand-texts">
+          <div class="brand-name">HousePlus</div>
+          <div class="brand-sub">AI 即時估價</div>
+        </div>
+        <div class="ai-badge">
+          <span class="live-dot"></span>即時更新
+        </div>
+      </div>
+
+      <div class="hero-addr">📍 新北市淡水區新市一路三段108號</div>
+
+      <div class="hero-price">1,268 <span class="unit">萬元</span></div>
+
+      <div class="hero-detail">
+        單價 25.3 萬元／坪
+        <span class="sep">|</span>
+        車位價 120 萬元
+      </div>
     </div>
-    <svg class="mini-svg" viewBox="0 0 320 44" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.22"/>
-          <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,36 C40,34 80,29 120,24 S190,15 240,10 S290,5 320,3 L320,44 L0,44 Z" fill="url(#ag)"/>
-      <path d="M0,36 C40,34 80,29 120,24 S190,15 240,10 S290,5 320,3" fill="none" stroke="#FF6B1A" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="0"   cy="36" r="3"   fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
-      <circle cx="64"  cy="30" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
-      <circle cx="128" cy="24" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
-      <circle cx="192" cy="16" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
-      <circle cx="256" cy="9"  r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
-      <circle cx="320" cy="3"  r="5"   fill="#FF6B1A" stroke="white" stroke-width="2"/>
-    </svg>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val up">↑ +1.3%</div>
+        <div class="stat-label">較上月</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val orange">+3.1%</div>
+        <div class="stat-label">高於區域</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">1,230萬</div>
+        <div class="stat-label">淡水區平均</div>
+      </div>
+    </div>
+
+    <div class="chart-band">
+      <div class="chart-meta">
+        近 6 個月房價走勢
+        <span>2026.2.19 更新</span>
+      </div>
+      <svg class="mini-svg" viewBox="0 0 320 46" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.22"/>
+            <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,38 C40,36 80,30 120,25 S190,16 240,11 S290,6 320,3 L320,46 L0,46 Z" fill="url(#ag)"/>
+        <path d="M0,38 C40,36 80,30 120,25 S190,16 240,11 S290,6 320,3" fill="none" stroke="#FF6B1A" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="0"   cy="38" r="3"   fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
+        <circle cx="64"  cy="31" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
+        <circle cx="128" cy="25" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
+        <circle cx="192" cy="17" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
+        <circle cx="256" cy="10" r="2.5" fill="white" stroke="#FF6B1A" stroke-width="1.8"/>
+        <circle cx="320" cy="3"  r="5"   fill="#FF6B1A" stroke="white" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <a class="cta-btn" href="https://memostar-s.github.io/insight/myhouse.html">
+      <span class="cta-left">
+        <span class="cta-label">🏠 回到我的房子看完整報告</span>
+        <span class="cta-sub">估價明細・歷史紀錄・我的清單</span>
+      </span>
+      <span class="cta-arrow">›</span>
+    </a>
+
   </div>
 
-  <a class="cta" href="https://memostar-s.github.io/insight/myhouse.html" target="_blank">
-    <span class="cta-label">🏠 查看我的房子</span>
-    <span class="cta-arrow">›</span>
-  </a>
+  <div class="footer-note">
+    House+ 通知頁（share.html）<br>
+    你可以把此網址貼到 LINE 分享給朋友
+  </div>
 
 </div>
-
-<!-- ─── Copy URL section ─── -->
-<div class="copy-section">
-  <div class="copy-label">附上網址，對方點擊即可進入完整估價頁</div>
-  <div class="url-row">
-    <div class="url-text">https://memostar-s.github.io/insight/myhouse.html</div>
-    <button class="copy-btn" id="cb" onclick="doCopy()">複製</button>
-  </div>
-</div>
-
-<script>
-function doCopy() {
-  const url = 'https://memostar-s.github.io/insight/myhouse.html';
-  const btn = document.getElementById('cb');
-  navigator.clipboard.writeText(url).then(ok).catch(() => {
-    const t = document.createElement('textarea');
-    t.value = url; document.body.appendChild(t); t.select();
-    document.execCommand('copy'); document.body.removeChild(t); ok();
-  });
-  function ok() {
-    btn.textContent = '✅ 已複製';
-    btn.classList.add('ok');
-    setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('ok'); }, 2000);
-  }
-}
-</script>
 </body>
 </html>
