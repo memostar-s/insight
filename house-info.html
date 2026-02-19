@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的房子 - 資訊登錄</title>
+    <title>🏠 我的房子｜HousePlus 好時價</title>
+
     <style>
         * {
             margin: 0;
@@ -32,31 +33,34 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 20px;
-        }
-
-        .brand-logo {
-            width: 180px;
-            height: auto;
+            margin-bottom: 26px;
         }
 
         .header h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #FF6B1A 0%, #FF9A2E 60%, #FFB830 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .header p {
             color: #666;
             font-size: 14px;
+        }
+
+        /* ⭐ 新手引導 info box */
+        .info-box {
+            background: #fff5f0;
+            border-left: 4px solid #FF6B1A;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
         }
 
         .form-group {
@@ -116,14 +120,9 @@
             box-shadow: 0 10px 25px rgba(255, 107, 26, 0.4);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
         .submit-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
-            transform: none;
         }
 
         .error-message {
@@ -131,16 +130,6 @@
             font-size: 13px;
             margin-top: 5px;
             display: none;
-        }
-
-        .info-box {
-            background: #fff5f0;
-            border-left: 4px solid #FF6B1A;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 13px;
-            color: #555;
         }
 
         @media (max-width: 480px) {
@@ -154,173 +143,123 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <div class="brand">
-                <img src="data:image/png;base64,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 AAAAAAAAAAAAAAAAAAAAAAB/9k=" class="brand-logo" alt="HousePlus 好時價">
-            </div>
-            <p>請輸入您的房屋資訊</p>
+            <h1>🏠 我的房子｜HousePlus 好時價</h1>
+            <p>從這裡開始，建立你的房屋專屬空間</p>
         </div>
 
+        <!-- ⭐ 新手引導文案 -->
         <div class="info-box">
-            💡 填寫完整資訊後,即可進入專屬的房屋管理頁面
+            👋 第一次使用也沒問題！<br>
+            只要輸入房屋的基本位置資訊，我們就會幫你建立一個專屬的房屋頁面。<br>
+            之後你可以隨時回來查看。
         </div>
 
         <form id="houseForm">
             <div class="form-group">
                 <label for="city">縣市 *</label>
-                <select id="city" name="city" required>
+                <select id="city" required>
                     <option value="">請選擇縣市</option>
-                    <option value="台北市">台北市</option>
-                    <option value="新北市">新北市</option>
-                    <option value="桃園市">桃園市</option>
-                    <option value="台中市">台中市</option>
-                    <option value="台南市">台南市</option>
-                    <option value="高雄市">高雄市</option>
-                    <option value="基隆市">基隆市</option>
-                    <option value="新竹市">新竹市</option>
-                    <option value="嘉義市">嘉義市</option>
-                    <option value="新竹縣">新竹縣</option>
-                    <option value="苗栗縣">苗栗縣</option>
-                    <option value="彰化縣">彰化縣</option>
-                    <option value="南投縣">南投縣</option>
-                    <option value="雲林縣">雲林縣</option>
-                    <option value="嘉義縣">嘉義縣</option>
-                    <option value="屏東縣">屏東縣</option>
-                    <option value="宜蘭縣">宜蘭縣</option>
-                    <option value="花蓮縣">花蓮縣</option>
-                    <option value="台東縣">台東縣</option>
-                    <option value="澎湖縣">澎湖縣</option>
-                    <option value="金門縣">金門縣</option>
-                    <option value="連江縣">連江縣</option>
+                    <option>台北市</option>
+                    <option>新北市</option>
+                    <option>桃園市</option>
+                    <option>台中市</option>
+                    <option>台南市</option>
+                    <option>高雄市</option>
+                    <option>基隆市</option>
+                    <option>新竹市</option>
+                    <option>嘉義市</option>
+                    <option>新竹縣</option>
+                    <option>苗栗縣</option>
+                    <option>彰化縣</option>
+                    <option>南投縣</option>
+                    <option>雲林縣</option>
+                    <option>嘉義縣</option>
+                    <option>屏東縣</option>
+                    <option>宜蘭縣</option>
+                    <option>花蓮縣</option>
+                    <option>台東縣</option>
+                    <option>澎湖縣</option>
+                    <option>金門縣</option>
+                    <option>連江縣</option>
                 </select>
                 <span class="error-message" id="cityError">請選擇縣市</span>
             </div>
 
             <div class="form-group">
                 <label for="district">行政區 *</label>
-                <input type="text" id="district" name="district" placeholder="例如：中正區、大安區" required>
+                <input type="text" id="district" placeholder="例如：中正區、大安區" required>
                 <span class="error-message" id="districtError">請輸入行政區</span>
             </div>
 
             <div class="form-group">
                 <label for="address">地址 *</label>
-                <input type="text" id="address" name="address" placeholder="例如：中山路123號4樓" required>
+                <input type="text" id="address" placeholder="例如：中山路123號4樓" required>
                 <span class="error-message" id="addressError">請輸入地址</span>
             </div>
 
+            <!-- ⭐ 新按鈕文案 -->
             <button type="submit" class="submit-btn" id="submitBtn">
-                進入我的房子 →
+                開始建立我的房子
             </button>
         </form>
     </div>
 
     <script>
         const form = document.getElementById('houseForm');
-        const citySelect = document.getElementById('city');
-        const districtInput = document.getElementById('district');
-        const addressInput = document.getElementById('address');
-        const submitBtn = document.getElementById('submitBtn');
+        const city = document.getElementById('city');
+        const district = document.getElementById('district');
+        const address = document.getElementById('address');
+        const btn = document.getElementById('submitBtn');
 
-        // 表單驗證
-        function validateForm() {
-            let isValid = true;
+        function validate() {
+            let ok = true;
 
-            // 驗證縣市
-            if (!citySelect.value) {
+            if (!city.value) {
                 document.getElementById('cityError').style.display = 'block';
-                citySelect.style.borderColor = '#e74c3c';
-                isValid = false;
+                ok = false;
             } else {
                 document.getElementById('cityError').style.display = 'none';
-                citySelect.style.borderColor = '#e0e0e0';
             }
 
-            // 驗證行政區
-            if (!districtInput.value.trim()) {
+            if (!district.value.trim()) {
                 document.getElementById('districtError').style.display = 'block';
-                districtInput.style.borderColor = '#e74c3c';
-                isValid = false;
+                ok = false;
             } else {
                 document.getElementById('districtError').style.display = 'none';
-                districtInput.style.borderColor = '#e0e0e0';
             }
 
-            // 驗證地址
-            if (!addressInput.value.trim()) {
+            if (!address.value.trim()) {
                 document.getElementById('addressError').style.display = 'block';
-                addressInput.style.borderColor = '#e74c3c';
-                isValid = false;
+                ok = false;
             } else {
                 document.getElementById('addressError').style.display = 'none';
-                addressInput.style.borderColor = '#e0e0e0';
             }
 
-            return isValid;
+            return ok;
         }
 
-        // 表單提交處理
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', e => {
             e.preventDefault();
+            if (!validate()) return;
 
-            if (validateForm()) {
-                // 收集資料
-                const houseData = {
-                    city: citySelect.value,
-                    district: districtInput.value.trim(),
-                    address: addressInput.value.trim(),
-                    fullAddress: `${citySelect.value}${districtInput.value.trim()}${addressInput.value.trim()}`,
-                    timestamp: new Date().toISOString()
-                };
+            localStorage.setItem('houseInfo', JSON.stringify({
+                city: city.value,
+                district: district.value.trim(),
+                address: address.value.trim(),
+                fullAddress: city.value + district.value.trim() + address.value.trim(),
+                timestamp: new Date().toISOString()
+            }));
 
-                // 儲存到 localStorage
-                localStorage.setItem('houseInfo', JSON.stringify(houseData));
+            btn.textContent = '正在建立房屋頁面...';
+            btn.disabled = true;
 
-                // 顯示載入狀態
-                submitBtn.textContent = '正在進入...';
-                submitBtn.disabled = true;
-
-                // 模擬載入,然後跳轉到房屋頁面
-                setTimeout(() => {
-                    // 跳轉到實際的房屋頁面
-                    window.location.href = 'https://memostar-s.github.io/insight/myhouse.html';
-                }, 1000);
-            }
-        });
-
-        // 即時驗證
-        citySelect.addEventListener('change', () => {
-            if (citySelect.value) {
-                document.getElementById('cityError').style.display = 'none';
-                citySelect.style.borderColor = '#e0e0e0';
-            }
-        });
-
-        districtInput.addEventListener('input', () => {
-            if (districtInput.value.trim()) {
-                document.getElementById('districtError').style.display = 'none';
-                districtInput.style.borderColor = '#e0e0e0';
-            }
-        });
-
-        addressInput.addEventListener('input', () => {
-            if (addressInput.value.trim()) {
-                document.getElementById('addressError').style.display = 'none';
-                addressInput.style.borderColor = '#e0e0e0';
-            }
-        });
-
-        // 頁面載入時檢查是否有儲存的資料
-        window.addEventListener('load', () => {
-            const savedData = localStorage.getItem('houseInfo');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                // 可以選擇自動填入之前的資料
-                // citySelect.value = data.city;
-                // districtInput.value = data.district;
-                // addressInput.value = data.address;
-            }
+            setTimeout(() => {
+                window.location.href = 'https://memostar-s.github.io/insight/myhouse.html';
+            }, 1000);
         });
     </script>
 </body>
