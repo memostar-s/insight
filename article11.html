@@ -1,963 +1,637 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>房市區域比較時，哪些差異最容易被忽略？ | House+好時價 insight</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #2c5aa0;
-            --secondary-color: #4a90e2;
-            --accent-color: #ff6b6b;
-            --success-color: #48bb78;
-            --warning-color: #f56565;
-            --text-dark: #2d3748;
-            --text-light: #4a5568;
-            --bg-light: #f7fafc;
-            --bg-white: #ffffff;
-            --border-color: #e2e8f0;
-            --gradient-start: #667eea;
-            --gradient-end: #764ba2;
-        }
-
-        body {
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background-color: var(--bg-light);
-            overflow-x: hidden;
-        }
-
-        /* Header - 固定式頂部導航列 */
-        header {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            padding: 1rem 0;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: white;
-            text-decoration: none;
-            font-family: 'Noto Serif TC', serif;
-            letter-spacing: 1px;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        /* Hero Section - 醒目的標題區域 */
-        .hero {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
-            padding: 2.5rem 1rem;
-            border-bottom: 4px solid var(--primary-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(102,126,234,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero .container {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--text-dark);
-            margin-bottom: 0.8rem;
-            font-family: 'Noto Serif TC', serif;
-            line-height: 1.4;
-            text-align: left;
-            animation: slideInFromLeft 0.6s ease-out;
-        }
-
-        .last-updated {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            opacity: 0.8;
-            text-align: left;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .last-updated::before {
-            content: "🕐";
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
-            background: var(--bg-white);
-            border-radius: 25px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .back-link::before {
-            content: "←";
-            margin-right: 0.5rem;
-            font-size: 1.2rem;
-        }
-
-        .back-link:hover {
-            background: var(--secondary-color);
-            color: white;
-            transform: translateX(-5px);
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        /* Table of Contents - 目錄導航 */
-        .toc {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .toc::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1), transparent);
-            pointer-events: none;
-        }
-
-        .toc h3 {
-            color: var(--primary-color);
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            position: relative;
-        }
-
-        .toc h3::before {
-            content: "📋";
-            font-size: 1.8rem;
-            animation: bounce 2s infinite;
-        }
-
-        .toc ul {
-            list-style: none;
-            display: grid;
-            gap: 0.8rem;
-        }
-
-        .toc li {
-            padding-left: 2rem;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .toc li::before {
-            content: "▸";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-
-        .toc li:hover::before {
-            transform: translateX(5px);
-        }
-
-        .toc a {
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: 500;
-            display: inline-block;
-            padding: 0.3rem 0;
-        }
-
-        .toc a:hover {
-            color: var(--primary-color);
-            transform: translateX(5px);
-        }
-
-        /* Article Content - 分段式內容呈現 */
-        .article-content {
-            background: var(--bg-white);
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .intro-text {
-            font-size: 1.08rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
-            border-left: 5px solid var(--primary-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-        }
-
-        .intro-text::before {
-            content: "💡";
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 2rem;
-            opacity: 0.3;
-        }
-
-        /* Section Headers - 清晰的視覺層次 */
-        section {
-            margin: 3rem 0;
-            scroll-margin-top: 100px;
-        }
-
-        h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 3rem 0 1.5rem;
-            font-family: 'Noto Serif TC', serif;
-            position: relative;
-            padding-bottom: 0.8rem;
-            padding-left: 1.2rem;
-        }
-
-        h2::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 5px;
-            background: linear-gradient(180deg, var(--gradient-start), var(--gradient-end));
-            border-radius: 3px;
-        }
-
-        h2::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            border-radius: 2px;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 2rem 0 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        h4 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 1.5rem 0 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        p {
-            margin-bottom: 1.2rem;
-            line-height: 1.8;
-        }
-
-        strong {
-            color: var(--text-dark);
-            font-weight: 700;
-        }
-
-        /* 重點提示框 - 使用漸層背景強調重要資訊 */
-        .highlight-box {
-            background: linear-gradient(135deg, #f6f8fb, #e9f0f7);
-            border-left: 5px solid var(--secondary-color);
-            padding: 1.8rem 2.2rem;
-            margin: 2rem 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .highlight-box::before {
-            content: "💡";
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 2.5rem;
-            opacity: 0.2;
-        }
-
-        .highlight-box p {
-            position: relative;
-            z-index: 1;
-        }
-
-        .highlight-box p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* 功能列表 - 用綠色勾選/紅色叉號標示 */
-        .feature-list {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2.5rem 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-
-        .feature-list h4 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .feature-list ul {
-            list-style: none;
-            display: grid;
-            gap: 0.5rem;
-        }
-
-        .feature-list li {
-            padding: 1rem 1rem 1rem 3.5rem;
-            position: relative;
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s;
-            border-radius: 8px;
-        }
-
-        .feature-list li:last-child {
-            border-bottom: none;
-        }
-
-        .feature-list li:hover {
-            background: rgba(102, 126, 234, 0.05);
-            transform: translateX(5px);
-        }
-
-        .feature-list li::before {
-            content: "✓";
-            position: absolute;
-            left: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--success-color);
-            font-weight: bold;
-            font-size: 1.4rem;
-            background: rgba(72, 187, 120, 0.15);
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .feature-list.negative li::before {
-            content: "✗";
-            color: var(--warning-color);
-            background: rgba(245, 101, 101, 0.15);
-        }
-
-        /* 方法卡片 - 卡片式佈局帶有hover效果 */
-        .method-cards {
-            display: grid;
-            gap: 2rem;
-            margin: 2.5rem 0;
-        }
-
-        .method-card {
-            background: linear-gradient(135deg, var(--bg-white), #f8f9ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .method-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
-        }
-
-        .method-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
-            border-color: var(--secondary-color);
-        }
-
-        .method-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .method-card h4 {
-            color: var(--primary-color);
-            font-size: 1.35rem;
-            margin-bottom: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .method-card .label {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .method-card p {
-            line-height: 1.8;
-        }
-
-        /* Info Box */
-        .info-box {
-            background: linear-gradient(135deg, #fff5f5, #ffe5e5);
-            border: 2px solid #feb2b2;
-            border-left: 5px solid var(--warning-color);
-            border-radius: 12px;
-            padding: 1.8rem 2.2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.1);
-        }
-
-        .info-box strong {
-            color: #c53030;
-            font-size: 1.1rem;
-        }
-
-        /* 相關連結區塊 */
-        .related-links {
-            background: linear-gradient(135deg, var(--bg-white), #f0f4ff);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-        }
-
-        .related-links h3 {
-            color: var(--primary-color);
-            margin-bottom: 1.8rem;
-            font-size: 1.4rem;
-        }
-
-        .related-links ul {
-            list-style: none;
-            display: grid;
-            gap: 1rem;
-        }
-
-        .related-links li {
-            padding-left: 2rem;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .related-links li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-size: 1.3rem;
-            transition: transform 0.3s;
-        }
-
-        .related-links li:hover::before {
-            transform: translateX(5px);
-        }
-
-        .related-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .related-links a:hover {
-            color: var(--primary-color);
-            transform: translateX(5px);
-        }
-
-        /* 專業的頁尾設計 */
-        footer {
-            background: linear-gradient(135deg, #1a202c, #2d3748);
-            color: white;
-            padding: 3.5rem 2rem 2.5rem;
-            margin-top: 5rem;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            opacity: 0.85;
-            margin-bottom: 0.6rem;
-            line-height: 1.8;
-        }
-
-        .footer-brand {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-family: 'Noto Serif TC', serif;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* 響應式設計，支援手機瀏覽 */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 2rem 1rem;
-            }
-
-            .hero h1 {
-                font-size: 1.4rem;
-            }
-
-            .container {
-                padding: 0 1rem;
-                margin: 2rem auto;
-            }
-
-            .article-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .toc {
-                padding: 2rem 1.5rem;
-            }
-
-            h2 {
-                font-size: 1.35rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            .method-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .method-card h4 {
-                font-size: 1.15rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
-            }
-
-            .method-card .label {
-                align-self: flex-start;
-            }
-
-            .feature-list {
-                padding: 2rem 1.5rem;
-            }
-
-            .highlight-box {
-                padding: 1.5rem 1.8rem;
-            }
-
-            .related-links {
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        /* 平滑的動畫效果 */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        @keyframes slideInFromLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .article-content section {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        /* 內容元素進入動畫 */
-        .toc {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .method-card {
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .method-card:nth-child(1) { animation-delay: 0.1s; }
-        .method-card:nth-child(2) { animation-delay: 0.2s; }
-        .method-card:nth-child(3) { animation-delay: 0.3s; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>房價鬆動未止、預售成交量創近年最大跌幅！ | House+ 好時價 News</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root{
+      --primary-color:#2c5aa0;
+      --secondary-color:#4a90e2;
+      --accent-color:#ff6b6b;
+      --text-dark:#2d3748;
+      --text-light:#4a5568;
+      --bg-light:#f7fafc;
+      --bg-white:#ffffff;
+      --border-color:#e2e8f0;
+      --gradient-start:#667eea;
+      --gradient-end:#764ba2;
+    }
+
+    body{
+      font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;
+      line-height:1.6;
+      color:var(--text-light);
+      background-color:var(--bg-light);
+      overflow-x:hidden;
+    }
+
+    header{
+      background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+      padding:1rem 0;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+
+    .header-container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 2rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+
+    .logo{
+      font-size:1.8rem;
+      font-weight:900;
+      color:white;
+      text-decoration:none;
+      font-family:'Noto Serif TC',serif;
+      letter-spacing:1px;
+      white-space:nowrap;
+    }
+
+    .nav-wrap{
+      display:flex;
+      gap:0.75rem;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-link{
+      color:rgba(255,255,255,0.9);
+      text-decoration:none;
+      font-weight:600;
+      font-size:0.95rem;
+      padding:0.4rem 0.8rem;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      transition:all 0.25s;
+      white-space:nowrap;
+    }
+    .nav-link:hover{ background:rgba(255,255,255,0.12); }
+
+    .hero{
+      background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1));
+      padding:2rem 1rem;
+      border-bottom:3px solid var(--primary-color);
+    }
+
+    .hero-inner{
+      max-width:900px;
+      margin:0 auto;
+      padding:0 2rem;
+    }
+
+    .hero .badge-row{
+      display:flex;
+      gap:0.5rem;
+      flex-wrap:wrap;
+      margin-bottom:0.8rem;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+      font-size:0.85rem;
+      font-weight:700;
+      padding:0.25rem 0.75rem;
+      border-radius:999px;
+      border:1px solid rgba(44,90,160,0.2);
+      background:rgba(44,90,160,0.06);
+      color:var(--primary-color);
+    }
+
+    .hero h1{
+      font-size:1.7rem;
+      font-weight:900;
+      color:var(--text-dark);
+      margin-bottom:0.5rem;
+      font-family:'Noto Serif TC',serif;
+      line-height:1.35;
+      text-align:left;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.75rem 1.25rem;
+      margin-top:0.6rem;
+      color:var(--text-light);
+      font-size:0.9rem;
+      opacity:0.85;
+    }
+    .meta span{
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+      white-space:nowrap;
+    }
+
+    .container{
+      max-width:900px;
+      margin:3rem auto;
+      padding:0 2rem;
+    }
+
+    .toc{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin-bottom:3rem;
+      box-shadow:0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .toc h3{
+      color:var(--primary-color);
+      font-size:1.3rem;
+      margin-bottom:1rem;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+    }
+    .toc h3::before{ content:"📰"; font-size:1.5rem; }
+
+    .toc ul{ list-style:none; }
+    .toc li{
+      margin:0.8rem 0;
+      padding-left:1.5rem;
+      position:relative;
+    }
+    .toc li::before{
+      content:"▸";
+      position:absolute;
+      left:0;
+      color:var(--secondary-color);
+      font-weight:bold;
+    }
+    .toc a{
+      color:var(--text-dark);
+      text-decoration:none;
+      transition:color 0.3s;
+      font-weight:500;
+    }
+    .toc a:hover{ color:var(--primary-color); }
+
+    .article-content{
+      background:var(--bg-white);
+      padding:3rem;
+      border-radius:12px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom:2rem;
+    }
+
+    .intro-text{
+      font-size:1.05rem;
+      line-height:1.75;
+      color:var(--text-dark);
+      margin-bottom:1.5rem;
+      padding:1.5rem;
+      background:linear-gradient(135deg,rgba(102,126,234,0.05),rgba(118,75,162,0.05));
+      border-left:4px solid var(--primary-color);
+      border-radius:8px;
+    }
+
+    .series-box{
+      background:linear-gradient(135deg,#f6f8fb,#f2f6ff);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:1.5rem 2rem;
+      margin:0 0 2rem 0;
+      box-shadow:0 3px 10px rgba(0,0,0,0.04);
+    }
+    .series-box strong{ color:var(--primary-color); font-weight:800; }
+    .series-box p:last-child{ margin-bottom:0; }
+
+    h2{
+      font-size:1.5rem;
+      font-weight:700;
+      color:var(--text-dark);
+      margin:2rem 0 1rem;
+      font-family:'Noto Serif TC',serif;
+      position:relative;
+      padding-bottom:0.5rem;
+    }
+    h2::after{
+      content:"";
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:50px;
+      height:3px;
+      background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));
+      border-radius:2px;
+    }
+
+    p{ margin-bottom:1rem; line-height:1.75; }
+
+    .highlight-box{
+      background:linear-gradient(135deg,#f6f8fb,#e9f0f7);
+      border-left:5px solid var(--secondary-color);
+      padding:1.5rem 2rem;
+      margin:2rem 0;
+      border-radius:8px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+    .highlight-box p:last-child{ margin-bottom:0; }
+
+    .stat-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1rem;
+      margin:1.5rem 0 0.5rem;
+    }
+    .stat-card{
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:1rem 1rem;
+      background:var(--bg-white);
+      box-shadow:0 3px 10px rgba(0,0,0,0.04);
+    }
+    .stat-card .k{ font-size:0.9rem; color:var(--text-light); opacity:0.9; margin-bottom:0.25rem; }
+    .stat-card .v{ font-size:1.35rem; font-weight:900; color:var(--text-dark); letter-spacing:0.3px; }
+    .stat-card .n{ font-size:0.85rem; color:var(--text-light); opacity:0.85; margin-top:0.25rem; }
+
+    .feature-list{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+    .feature-list h4{
+      color:var(--primary-color);
+      font-size:1.2rem;
+      margin-bottom:1rem;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+    }
+    .feature-list ul{ list-style:none; }
+    .feature-list li{
+      padding:0.8rem 0 0.8rem 2.5rem;
+      position:relative;
+      border-bottom:1px solid var(--border-color);
+    }
+    .feature-list li:last-child{ border-bottom:none; }
+    .feature-list li::before{
+      content:"✓";
+      position:absolute;
+      left:0;
+      color:#48bb78;
+      font-weight:bold;
+      font-size:1.2rem;
+      background:rgba(72,187,120,0.1);
+      width:1.8rem;
+      height:1.8rem;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .feature-list.negative li::before{
+      content:"✗";
+      color:#f56565;
+      background:rgba(245,101,101,0.1);
+    }
+
+    .info-box{
+      background:linear-gradient(135deg,#fff5f5,#ffe5e5);
+      border:2px solid #feb2b2;
+      border-radius:12px;
+      padding:1.5rem 2rem;
+      margin:2rem 0;
+    }
+    .info-box strong{ color:#c53030; font-size:1.05rem; }
+
+    .cta-box{
+      background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));
+      color:white;
+      padding:2.5rem;
+      border-radius:12px;
+      text-align:center;
+      margin:3rem 0;
+      box-shadow:0 10px 30px rgba(102,126,234,0.3);
+    }
+    .cta-box h3{
+      color:white;
+      font-size:1.8rem;
+      margin-bottom:1rem;
+      font-family:'Noto Serif TC',serif;
+    }
+    .cta-box p{ margin-bottom:1.5rem; opacity:0.95; }
+
+    .related-links{
+      background:var(--bg-white);
+      border:2px solid var(--border-color);
+      border-radius:12px;
+      padding:2rem;
+      margin:2rem 0;
+    }
+    .related-links h3{ color:var(--primary-color); margin-bottom:1.5rem; }
+    .related-links ul{ list-style:none; }
+    .related-links li{
+      margin:1rem 0;
+      padding-left:1.5rem;
+      position:relative;
+    }
+    .related-links li::before{
+      content:"→";
+      position:absolute;
+      left:0;
+      color:var(--secondary-color);
+      font-weight:bold;
+    }
+    .related-links a{
+      color:var(--secondary-color);
+      text-decoration:none;
+      font-weight:500;
+      transition:color 0.3s;
+    }
+    .related-links a:hover{
+      color:var(--primary-color);
+      text-decoration:underline;
+    }
+
+    footer{
+      background:var(--text-dark);
+      color:white;
+      padding:3rem 2rem 2rem;
+      margin-top:4rem;
+    }
+    .footer-content{
+      max-width:1200px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .footer-content p{ opacity:0.8; margin-bottom:0.5rem; }
+    .footer-brand{
+      font-size:1.5rem;
+      font-weight:700;
+      margin-bottom:1rem;
+      font-family:'Noto Serif TC',serif;
+    }
+
+    @media (max-width: 768px){
+      .hero{ padding:1.5rem 1rem; }
+      .hero-inner{ padding:0 1rem; }
+      .hero h1{ font-size:1.4rem; }
+      .container{ padding:0 1rem; margin:1.5rem auto; }
+      .article-content{ padding:1.5rem 1rem; }
+      .toc{ padding:1.5rem 1rem; }
+      h2{ font-size:1.3rem; }
+      .feature-list{ padding:1.5rem 1rem; }
+      .highlight-box{ padding:1rem 1.5rem; }
+      .cta-box{ padding:1.5rem 1rem; }
+      .cta-box h3{ font-size:1.3rem; }
+      .series-box{ padding:1.2rem 1rem; }
+      .stat-grid{ grid-template-columns:1fr; }
+    }
+
+    html{ scroll-behavior:smooth; }
+
+    @keyframes fadeInUp{
+      from{ opacity:0; transform:translateY(30px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    .article-content > *{ animation: fadeInUp 0.6s ease-out; }
+  </style>
 </head>
+
 <body>
-    <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">House+好時價 insight</a>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <a href="index.html" class="back-link">返回文章列表</a>
-            <h1>房市區域比較時，哪些差異最容易被忽略？</h1>
-            <p class="last-updated">最後更新時間：2025年2月</p>
-        </div>
-    </section>
-
-    <div class="container">
-        <div class="toc">
-            <h3>文章目錄</h3>
-            <ul>
-                <li><a href="#section1">為什麼區域比較特別容易出錯？</a></li>
-                <li><a href="#section2">為什麼區域比較不能只用「一個指標」？</a></li>
-                <li><a href="#section3">House+ 的區域比較原則</a></li>
-                <li><a href="#section4">「哪個區域房價漲最多？」</a></li>
-                <li><a href="#section5">「哪個區域的市場結構正在改變？」
-「哪個區域的風險正在累積？」</a></li>
-                <li><a href="#section6">延伸閱讀</a></li>
-                <li><a href="#section7">為什麼不能只看平均房價？從分布看市場風險</a></li>
-                <li><a href="#section8">成交量為什麼常比價格更早反應市場？</a></li>
-                <li><a href="#section9">為什麼住宅與商辦必須分開估價？從模型設計看房市差異</a></li>
-                <li><a href="#section10">資料整理說明</a></li>
-            </ul>
-        </div>
-
-        <article class="article-content">
-                <div class="intro-text">
-                    <p>本文為 House+ 房市資料與方法論系列內容之一，
-目的在於說明房市區域比較時，常被忽略的結構性差異與解讀風險。
-內容以公開資料與通行實務為基礎，協助理解區域房市的真實差異，
-並不構成個別交易建議、投資建議或鑑價結果。</p>
-                </div>
-
-            <section id="section1">
-                <h2>為什麼區域比較特別容易出錯？</h2>
-                <p>在房市分析中，「區域比較」看似直觀，卻是最容易產生誤判的情境之一。</p>
-
-                <p>常見的比較方式包括：</p>
-
-                <p>不同縣市房價高低</p>
-
-                <p>六都年增率比較</p>
-
-                <p>區域成交量變化</p>
-
-                <p>但若只看結果數字，往往忽略一個關鍵事實：</p>
-
-                <p>不同區域的市場結構，本來就不一樣。</p>
-
-                <p>忽略差異一：交易產品組成不同</p>
-
-                <p>不同區域，交易的「房子種類」可能完全不同。</p>
-
-                <p>例如：</p>
-
-                <p>有些區域以新成屋、預售屋為主</p>
-
-                <p>有些區域以中古屋為主</p>
-
-                <p>有些區域高價產品占比高</p>
-
-                <p>若直接比較平均或中位價格，很容易出現：</p>
-
-                <p>價格變動其實來自產品結構改變</p>
-
-                <p>而非市場整體漲跌</p>
-
-                <div class="highlight-box">
-                    <p>👉 看起來像是價格上升，實際上只是「賣的房子不一樣」。</p>
-                </div>
-
-                <p>忽略差異二：成交量基數不同</p>
-
-                <p>成交量變動的解讀，必須放在原本的量體規模中。</p>
-
-                <p>成交量大的區域，小幅下滑可能代表實質轉弱</p>
-
-                <p>成交量小的區域，單月大幅波動可能只是偶發</p>
-
-                <p>若忽略基數差異，容易：</p>
-
-                <p>高估小市場的變動意義</p>
-
-                <p>低估大市場的結構性轉折</p>
-
-                <p>忽略差異三：價格分布型態不同</p>
-
-                <p>不同區域的價格分布，可能差異極大：</p>
-
-                <p>有些區域高價集中、右偏明顯</p>
-
-                <p>有些區域價格分布相對集中</p>
-
-                <p>有些區域價格分化快速擴大</p>
-
-                <p>在這種情況下：</p>
-
-                <p>相同的平均或中位數變動</p>
-
-                <p>代表的市場意涵可能完全不同</p>
-
-                <div class="highlight-box">
-                    <p>👉 數字相同，不代表風險相同。</p>
-                </div>
-
-                <p>忽略差異四：市場循環不同步</p>
-
-                <p>房市並非全國同步運作。</p>
-
-                <p>不同區域可能因為：</p>
-
-                <p>產業結構差異</p>
-
-                <p>推案時程不同</p>
-
-                <p>人口與就業條件差異</p>
-
-                <p>而處於不同的市場階段。</p>
-
-                <p>因此常見的情況是：</p>
-
-                <p>某些區域已進入盤整</p>
-
-                <p>其他區域仍在高檔或回溫</p>
-
-                <p>若假設「全國同進同退」，容易錯判區域風險。</p>
-
-                <p>忽略差異五：預售與成屋比例不同</p>
-
-                <p>在區域比較中，是否納入預售市場，影響極大。</p>
-
-                <p>預售占比高的區域，成交量對信心變化更敏感</p>
-
-                <p>成屋為主的區域，價格調整通常較慢</p>
-
-                <p>因此：</p>
-
-                <p>相同的成交量變動</p>
-
-                <p>在不同區域，代表的市場訊號並不一致</p>
-
-            </section>
-
-            <section id="section2">
-                <h2>為什麼區域比較不能只用「一個指標」？</h2>
-                <p>區域比較若只使用單一指標，容易落入以下陷阱：</p>
-
-                <p>只看價格，忽略量縮風險</p>
-
-                <p>只看量變，忽略結構差異</p>
-
-                <p>只看年增率，忽略基期效果</p>
-
-                <p>實務上，更合理的做法是：</p>
-
-                <p>在同一區域內，觀察多個指標的相互變化，再進行跨區比較。</p>
-
-            </section>
-
-            <section id="section3">
-                <h2>House+ 的區域比較原則</h2>
-                <p>在 House+ 的區域房市分析中，我們遵循以下原則：</p>
-
-                <p>不直接比較單一價格數字</p>
-
-                <p>優先確認交易結構與樣本差異</p>
-
-                <p>搭配成交量、中位數與分布解讀</p>
-
-                <p>將區域視為「不同市場」，而非同質樣本</p>
-
-                <p>透過這樣的方式，降低區域比較時的誤判風險。</p>
-
-                <p>區域比較真正該回答的問題</p>
-
-                <p>與其問：</p>
-
-            </section>
-
-            <section id="section4">
-                <h2>「哪個區域房價漲最多？」</h2>
-                <p>不如問：</p>
-
-            </section>
-
-            <section id="section5">
-                <h2>「哪個區域的市場結構正在改變？」
-「哪個區域的風險正在累積？」</h2>
-                <p>這樣的比較，才有助於理解房市，而不是製造排名。</p>
-
-            </section>
-
-            <section id="section6">
-                <h2>延伸閱讀</h2>
-            </section>
-
-            <section id="section7">
-                <h2>為什麼不能只看平均房價？從分布看市場風險</h2>
-            </section>
-
-            <section id="section8">
-                <h2>成交量為什麼常比價格更早反應市場？</h2>
-            </section>
-
-            <section id="section9">
-                <h2>為什麼住宅與商辦必須分開估價？從模型設計看房市差異</h2>
-            </section>
-
-            <section id="section10">
-                <h2>資料整理說明</h2>
-                <p>本文為房市區域比較與結構差異之說明，內容以公開資料與通行分析觀點為基礎，不涉及個別區域投資建議。</p>
-
-                <p>資料整理：House+ 好時價</p>
-
-            </section>
-
-        </article>
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo">House+ 好時價</a>
+      <div class="nav-wrap">
+        <a class="nav-link" href="news.html">News 列表</a>
+        <a class="nav-link" href="index.html">Insights 列表</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="badge-row">
+        <span class="badge">📰 News</span>
+        <span class="badge">主題：房價修正 × 預售量縮</span>
+        <span class="badge">期別：2025.11</span>
+      </div>
+
+      <h1>房價鬆動未止、預售成交量創近年最大跌幅！</h1>
+
+      <div class="meta">
+        <span>🕙 發布時間：2025-11-27 10:00</span>
+        <span>👤 聯絡人：馮宇廷 助理研究員</span>
+        <span>✉️ 聯絡信箱：houseplus@anfusolutions.com</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- TOC -->
+    <div class="toc">
+      <h3>文章目錄</h3>
+      <ul>
+        <li><a href="#position">本文定位</a></li>
+        <li><a href="#macro">景氣回暖，但房市未同步回升</a></li>
+        <li><a href="#price">全國房價：跌幅擴大、區域修正加深</a></li>
+        <li><a href="#presale-volume">預售市場：價穩量縮，成交量創近年最大跌幅</a></li>
+        <li><a href="#presale-price">為何量縮但價格仍撐？</a></li>
+        <li><a href="#outlook">展望：短期高價低量恐延續</a></li>
+        <li><a href="#method">資料與方法說明</a></li>
+        <li><a href="#contact">媒體聯絡</a></li>
+      </ul>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-brand">House+好時價 insight</div>
-            <p>專業房市數據分析平台</p>
-            <p>&copy; 2025 House+. All rights reserved.</p>
+    <!-- Article -->
+    <article class="article-content">
+      <section id="position">
+        <h2>本文定位</h2>
+        <div class="series-box">
+          <p><strong>本文為 House+ 好時價 2025.11 月份新聞稿</strong>整理版，聚焦「景氣訊號 × 房價修正 × 預售量縮」的結構解讀。</p>
+          <p>內容以公開資訊與通行分析觀點為基礎，不構成投資建議、交易建議或個別鑑價結果。</p>
         </div>
-    </footer>
+
+        <div class="intro-text">
+          景氣對策信號顯示經濟循環進入轉向階段，但房市走勢並未同步回升。
+          在整體買方態度轉趨保守之下，市場進入明顯調整期：<strong>房價指數下滑、預售成交量大幅萎縮</strong>，呈現「價穩量縮」格局。
+        </div>
+      </section>
+
+      <section id="macro">
+        <h2>景氣回暖，但房市未同步回升</h2>
+        <div class="highlight-box">
+          <p>國發會公布：<strong>2025 年 9 月燈號由黃藍燈轉為橘黃燈</strong>，<strong>綜合分數升至 35 分</strong>；領先指標在連續下滑後出現反轉，同時指標在觸頂後轉為持平，整體經濟活動處於高檔盤整。</p>
+          <p style="margin-bottom:0;">然而房市自去年底出現反轉訊號後，市場氛圍轉趨保守，房價指數也出現下滑。</p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="k">景氣燈號</div>
+            <div class="v">橘黃燈</div>
+            <div class="n">（2025/09）</div>
+          </div>
+          <div class="stat-card">
+            <div class="k">綜合分數</div>
+            <div class="v">35</div>
+            <div class="n">景氣高檔盤整</div>
+          </div>
+          <div class="stat-card">
+            <div class="k">房市氛圍</div>
+            <div class="v">保守</div>
+            <div class="n">未同步回升</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="price">
+        <h2>全國房價：跌幅擴大、區域修正加深</h2>
+        <div class="highlight-box">
+          <p>依 2025 年 10 月清華安富房價指數：<strong>全國房價指數 207.25</strong>，<strong>年減 1.68%</strong>，跌幅持續擴大。</p>
+          <p style="margin-bottom:0;">六都及新竹地區全面下滑，其中中南部修正幅度更大，北部相對抗跌。</p>
+        </div>
+
+        <div class="feature-list">
+          <h4>六都與新竹：修正較明顯的城市（摘要）</h4>
+          <ul>
+            <li>台中市：年減 4.01%（跌幅最深）</li>
+            <li>高雄市：年減 3.17%</li>
+            <li>台南市：年減 2.44%</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <p><strong>解讀提醒：</strong>當價格開始修正，通常會伴隨「量先降、價後動」的市場節奏；接下來更值得看的是：哪一些城市會出現由量縮轉為價格鬆動的延伸效應。</p>
+        </div>
+      </section>
+
+      <section id="presale-volume">
+        <h2>預售市場：價穩量縮，成交量創近年最大跌幅</h2>
+
+        <p>
+          在買方態度保守下，預售市場成交動能顯著降溫。House+ 觀察 2025 年第 2 季六都預售市場，
+          整體呈現「價穩量縮」格局；與 2024Q2 相比，各都成交戶數大幅萎縮，市場交易節奏明顯放緩。
+        </p>
+
+        <div class="feature-list negative">
+          <h4>❗ 2025Q2 預售成交量（相較 2024Q2）年減幅</h4>
+          <ul>
+            <li>台北市：年減 57.31%</li>
+            <li>新北市：年減 65.69%</li>
+            <li>桃園市：年減 75.44%</li>
+            <li>台中市：年減 82.22%</li>
+            <li>台南市：年減 88.38%</li>
+            <li>高雄市：年減 85.95%</li>
+          </ul>
+        </div>
+
+        <div class="highlight-box">
+          <p><strong>關鍵訊號：</strong>成交量同步出現大幅下滑，代表買方普遍採取觀望，預售市場進入明顯調整期。</p>
+          <p style="margin-bottom:0;">短期內交易量的變化，將是判讀市場冷卻速度的優先指標。</p>
+        </div>
+      </section>
+
+      <section id="presale-price">
+        <h2>為何量縮但價格仍撐？</h2>
+
+        <p>
+          值得注意的是，儘管成交量大幅下滑，2025Q2 的預售價格端並未明顯鬆動。
+          House+ 統計預售屋單價中位數表現，多數城市仍呈年增，僅台北市略為修正但仍站穩高點。
+        </p>
+
+        <div class="feature-list">
+          <h4>預售屋單價中位數（年增率，摘要）</h4>
+          <ul>
+            <li>桃園：年增 13.2%</li>
+            <li>台中：年增 15%</li>
+            <li>台南：年增 7.97%</li>
+            <li>高雄：年增 5.9%</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <p><strong>可能原因（新聞稿觀點）：</strong>土地與營建成本居高不下、新案推案策略與產品定位，使建商不願大幅讓價；買方則受高總價、政策不確定性等因素影響轉趨保守。</p>
+        </div>
+      </section>
+
+      <section id="outlook">
+        <h2>展望：短期高價低量恐延續</h2>
+        <div class="highlight-box">
+          <p><strong>整體而言</strong>，預售市場已進入調整期，短期內「高價低量」格局恐將延續。</p>
+          <p style="margin-bottom:0;">後續若要觀察是否進一步轉為價格鬆動，需追蹤成交量是否止跌回穩、以及新案推案策略是否出現讓價訊號。</p>
+        </div>
+      </section>
+
+      <section id="method">
+        <h2>資料與方法說明</h2>
+        <div class="series-box">
+          <p><strong>資料來源：</strong>國發會經濟景氣對策信號（燈號/綜合分數）、清華安富房價指數（全國與六都/新竹）、以及六都 2025Q2 預售成交量與單價中位數的年變動整理。</p>
+          <p><strong>重點指標：</strong>價格（房價指數/中位數）與量（成交戶數年增減），用於判讀「價穩量縮」與後續是否轉向「價跌量縮」。</p>
+          <p><strong>聲明：</strong>本文為新聞稿整理與趨勢觀察，不構成投資建議、交易建議或個別鑑價結論。</p>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h2>媒體聯絡</h2>
+        <div class="highlight-box">
+          <p><strong>聯絡人：</strong>馮宇廷 助理研究員</p>
+          <p><strong>Email：</strong>
+            <a href="mailto:houseplus@anfusolutions.com" style="color:var(--primary-color); font-weight:800; text-decoration:none;">
+              houseplus@anfusolutions.com
+            </a>
+          </p>
+          <p style="margin-bottom:0;"><strong>發布時間：</strong>2025-11-27 上午 10:00</p>
+        </div>
+      </section>
+    </article>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h3>想收到每月房市重點整理？</h3>
+      <p>訂閱 House+ 電子報：用一致的方法看「結構 × 量價 × 分布」，避免只看單一數字造成誤判。</p>
+      <a href="subscribe.html" class="nav-link" style="display:inline-block; border-color:rgba(255,255,255,0.35);">
+        前往訂閱
+      </a>
+    </div>
+
+    <!-- Related Links -->
+    <div class="related-links">
+      <h3>延伸閱讀（Insights）</h3>
+      <ul>
+        <li><a href="article9.html">交通建設帶動房市上揚，新北市蛋白區房價漲幅明顯超越蛋黃區</a></li>
+        <li><a href="article10.html">景氣亮紅燈，房市卻退燒？房市量縮盤整，價格分化浮現</a></li>
+        <li><a href="article5.html">為什麼不能只看平均房價？從價格分布看市場風險</a></li>
+      </ul>
+    </div>
+
+    <!-- Data Source -->
+    <div class="article-content" style="margin-top: 2rem; padding: 1.5rem;">
+      <h3>資料整理說明</h3>
+      <p>本文依 2025/11/27 House+ 好時價新聞稿內容重整段落，採用一致版型呈現「景氣→房價→預售量縮→價格黏著→展望」。</p>
+      <p><strong>資料整理：House+ 好時價</strong></p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">House+ 好時價</div>
+      <p>專業房市數據分析平台</p>
+      <p>&copy; 2025 House+. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
