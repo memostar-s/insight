@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>我的房子｜即時估價</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --grad: linear-gradient(110deg, #FF6B1A 0%, #FF9A2E 60%, #FFB830 100%);
+  --orange: #FF6B1A;
+  --orange-pale: #FFF4EE;
+  --orange-mid: #FFE0CC;
+  --white: #FFFFFF;
+  --gray-100: #F8F8F8;
+  --gray-200: #F0F0F0;
+  --gray-300: #E0E0E0;
+  --gray-500: #999999;
+  --gray-700: #555555;
+  --dark: #1A1A1A;
+  --green: #22C55E;
+  --green-pale: #ECFDF5;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: #F2F2F2;
+  color: var(--dark);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+.topbar {
+  background: var(--grad);
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 14px rgba(255,107,26,0.35);
+}
+
+.topbar-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.topbar-logo span {
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 500;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.topbar-share {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.address-bar {
+  background: white;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.address-icon {
+  width: 32px; height: 32px;
+  background: var(--grad);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.address-text { font-size: 13px; font-weight: 600; color: var(--dark); line-height: 1.4; }
+.address-sub { font-size: 11px; color: var(--gray-500); }
+.address-edit { margin-left: auto; font-size: 12px; color: var(--orange); font-weight: 600; border: none; background: none; cursor: pointer; flex-shrink: 0; }
+
+/* Section */
+.section {
+  margin: 10px 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  animation: slideUp 0.4s ease both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section:nth-child(1){animation-delay:0.05s}
+.section:nth-child(2){animation-delay:0.10s}
+.section:nth-child(3){animation-delay:0.15s}
+.section:nth-child(4){animation-delay:0.20s}
+.section:nth-child(5){animation-delay:0.25s}
+.section:nth-child(6){animation-delay:0.30s}
+
+.section-header {
+  background: var(--grad);
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-tag {
+  background: rgba(255,255,255,0.28);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.8px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.section-badge { margin-left: auto; }
+
+.section-body { background: white; padding: 16px 18px 18px; }
+
+.update-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.35);
+  font-size: 10px;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.update-dot {
+  width: 6px; height: 6px;
+  background: #7AFF9E;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* Map */
+.map-svg-wrap {
+  width: 100%;
+  height: 175px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+/* Price */
+.price-label { font-size: 12px; color: var(--gray-500); margin-bottom: 2px; }
+
+.price-big {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.price-big span { font-size: 20px; font-weight: 500; }
+.price-unit { font-size: 14px; color: var(--gray-700); font-weight: 500; }
+
+.price-note-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 12px; }
+.price-note { font-size: 11px; color: var(--gray-500); }
+.price-note strong { color: var(--orange); font-weight: 600; }
+
+.price-parking {
+  display: flex;
+  align-items: center;
+  background: var(--orange-pale);
+  border: 1px solid var(--orange-mid);
+  border-radius: 10px;
+  padding: 10px 14px;
+  gap: 10px;
+}
+.price-parking-label { font-size: 11px; color: var(--gray-500); }
+.price-parking-val { font-size: 16px; font-weight: 700; color: var(--dark); }
+
+/* M2 */
+.compare-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; background: var(--green-pale); border-radius: 12px; margin-bottom: 12px;
+}
+
+.compare-arrow-circle {
+  width: 38px; height: 38px; background: var(--green); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.compare-pct { font-family: 'DM Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--green); line-height: 1; }
+.compare-sub { font-size: 11px; color: var(--gray-500); }
+
+.history-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--gray-100); border-radius: 12px; padding: 12px 14px;
+}
+
+.history-date { font-size: 11px; color: var(--gray-500); }
+.history-price { font-size: 15px; font-weight: 700; color: var(--dark); }
+.history-badge { background: var(--green-pale); color: var(--green); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+
+/* M3 */
+.bar-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.bar-meta { display: flex; justify-content: space-between; font-size: 12px; }
+.bar-name { color: var(--gray-700); font-weight: 500; }
+.bar-val { font-weight: 700; color: var(--dark); }
+.bar-track { height: 10px; background: var(--gray-200); border-radius: 10px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 10px; }
+.bar-fill.region { background: var(--gray-300); width: 87%; }
+.bar-fill.mine { background: var(--grad); width: 90%; }
+
+.region-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--orange-pale); border: 1px solid var(--orange-mid);
+  color: var(--orange); font-size: 12px; font-weight: 700;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 14px;
+}
+
+/* Extend cards */
+.extend-cards { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.extend-cards::-webkit-scrollbar { display: none; }
+
+.extend-card {
+  flex-shrink: 0; background: var(--gray-100); border: 1px solid var(--gray-200);
+  border-radius: 10px; padding: 9px 13px;
+  display: flex; align-items: center; gap: 5px; cursor: pointer; transition: all 0.18s;
+}
+.extend-card:active { background: var(--orange-pale); border-color: var(--orange-mid); }
+.extend-card-icon { font-size: 15px; }
+.extend-card-text { font-size: 12px; font-weight: 500; color: var(--gray-700); white-space: nowrap; }
+.extend-card-arrow { font-size: 11px; color: var(--gray-500); }
+
+.extend-card.hot { background: var(--orange-pale); border-color: var(--orange-mid); }
+.extend-card.hot .extend-card-text { color: var(--orange); }
+.extend-card.hot .extend-card-arrow { color: var(--orange); }
+
+/* M4 price range */
+.price-range-track { position: relative; height: 48px; margin: 14px 0 6px; }
+.price-range-bar { position: absolute; top: 50%; transform: translateY(-50%); width: 100%; height: 9px; background: var(--gray-200); border-radius: 9px; }
+.price-range-fill { position: absolute; top: 0; left: 10%; right: 10%; height: 100%; background: var(--grad); border-radius: 9px; }
+.price-range-marker { position: absolute; top: 50%; left: 54%; transform: translate(-50%, -50%); z-index: 2; display: flex; flex-direction: column; align-items: center; }
+.price-range-tooltip { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--orange); color: white; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.price-range-tooltip::after { content:''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--orange); }
+.price-range-dot { width: 20px; height: 20px; background: var(--orange); border: 3px solid white; border-radius: 50%; box-shadow: 0 2px 8px rgba(255,107,26,0.45); }
+.price-range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); }
+.price-range-labels strong { color: var(--dark); }
+
+/* Chart */
+.chart-wrap { margin: 12px 0; height: 150px; position: relative; }
+.chart-svg { width: 100%; height: 100%; overflow: visible; }
+
+.chart-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; padding: 0 2px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--gray-700); }
+.legend-line { width: 20px; height: 3px; border-radius: 3px; }
+.legend-line.solid { background: var(--orange); }
+.legend-line.dotted-green { background: transparent; border-top: 2.5px dotted #34C784; }
+.legend-line.dashed-blue { background: transparent; border-top: 2.5px dashed #4A9FFF; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; background: #EF4444; }
+
+/* M6 */
+.insight-box {
+  background: var(--grad); border-radius: 14px;
+  padding: 18px; color: white; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+}
+.insight-box::before {
+  content: '"'; position: absolute; right: 12px; top: -8px;
+  font-size: 88px; color: rgba(255,255,255,0.13); font-family: serif; line-height: 1;
+}
+.insight-icon { font-size: 22px; margin-bottom: 8px; }
+.insight-text { font-size: 14px; font-weight: 500; line-height: 1.75; position: relative; }
+.insight-date { font-size: 11px; opacity: 0.75; margin-top: 8px; }
+
+/* LINE card */
+.line-card {
+  margin: 10px 14px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  animation: slideUp 0.4s 0.35s ease both;
+}
+
+.line-icon { width: 44px; height: 44px; background: #06C755; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 24px; }
+.line-info { flex: 1; }
+.line-title { font-size: 14px; font-weight: 700; color: var(--dark); }
+.line-sub { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+.line-btn { background: #06C755; color: white; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 20px; border: none; cursor: pointer; white-space: nowrap; }
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 430px; background: white;
+  border-top: 1px solid var(--gray-200);
+  padding: 10px 0 18px;
+  display: flex; justify-content: space-around;
+  z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+}
+
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.nav-icon { font-size: 22px; }
+.nav-label { font-size: 10px; color: var(--gray-500); font-weight: 500; }
+.nav-item.active .nav-label { color: var(--orange); font-weight: 700; }
+
+.bottom-spacer { height: 85px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    HousePlus
+    <span>我的房子</span>
+  </div>
+  <button class="topbar-share">
+    <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ADDRESS BAR -->
+<div class="address-bar">
+  <div class="address-icon">
+    <svg width="16" height="16" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
+      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </div>
+  <div>
+    <div class="address-text">新北市淡水區新市一路三段108號10樓</div>
+    <div class="address-sub">45坪・3房2衛・14年・淡海新市鎮</div>
+  </div>
+  <button class="address-edit">編輯</button>
+</div>
+
+<!-- M1 本月估價 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M1</span>
+    <span class="section-title">本月估價</span>
+    <div class="section-badge">
+      <div class="update-badge">
+        <span class="update-dot"></span>AI 即時
+      </div>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <!-- 淡海新市鎮地圖 SVG -->
+    <div class="map-svg-wrap">
+      <svg viewBox="0 0 380 175" width="100%" height="175" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="175" fill="#E8F2F8"/>
+        <!-- River bottom -->
+        <path d="M0,145 Q90,135 180,142 Q270,149 380,142 L380,175 L0,175 Z" fill="#B2D5EC" opacity="0.85"/>
+        <path d="M0,155 Q100,146 200,152 Q300,158 380,152 L380,175 L0,175 Z" fill="#9CC8E5" opacity="0.7"/>
+        <!-- Main horizontal road 新市一路三段 -->
+        <rect x="0" y="80" width="380" height="11" fill="#D6C89A"/>
+        <line x1="0" y1="85.5" x2="380" y2="85.5" stroke="white" stroke-width="0.9" stroke-dasharray="16,12" opacity="0.7"/>
+        <text x="190" y="79" font-size="8" fill="#8A7A50" font-family="sans-serif" text-anchor="middle">新市一路三段</text>
+        <!-- Secondary horizontal road -->
+        <rect x="0" y="110" width="380" height="7" fill="#D6C89A" opacity="0.75"/>
+        <!-- Vertical roads -->
+        <rect x="55" y="0" width="8" height="145" fill="#D6C89A"/>
+        <rect x="178" y="0" width="7" height="145" fill="#D6C89A"/>
+        <rect x="296" y="58" width="6" height="87" fill="#D6C89A" opacity="0.8"/>
+        <!-- ≡ Park block -->
+        <rect x="8" y="8" width="43" height="68" rx="3" fill="#B8D8A8" opacity="0.85"/>
+        <text x="29" y="38" font-size="6.5" fill="#4A7A3A" font-family="sans-serif" text-anchor="middle" font-weight="600">北投</text>
+        <text x="29" y="48" font-size="6.5" fill="#4A7A3A" font-family="sans-serif" text-anchor="middle" font-weight="600">新市公園</text>
+        <!-- Building blocks top -->
+        <rect x="67" y="8" width="38" height="28" rx="3" fill="#D0CCB8" opacity="0.72"/>
+        <rect x="110" y="8" width="62" height="28" rx="3" fill="#D0CCB8" opacity="0.72"/>
+        <rect x="188" y="8" width="100" height="68" rx="3" fill="#CBD5E0" opacity="0.72"/>
+        <text x="238" y="46" font-size="6.5" fill="#5A6A7A" font-family="sans-serif" text-anchor="middle">停車場</text>
+        <rect x="67" y="42" width="38" height="34" rx="3" fill="#D0CCB8" opacity="0.65"/>
+        <rect x="110" y="42" width="62" height="34" rx="3" fill="#D0CCB8" opacity="0.65"/>
+        <!-- 7-11 upper right -->
+        <rect x="332" y="60" width="24" height="14" rx="3" fill="#D32F2F" opacity="0.9"/>
+        <text x="344" y="70" font-size="7.5" fill="white" font-family="sans-serif" font-weight="bold" text-anchor="middle">7</text>
+        <!-- Lower blocks -->
+        <rect x="8" y="94" width="43" height="42" rx="3" fill="#D0CCB8" opacity="0.65"/>
+        <text x="29" y="112" font-size="6" fill="#666" font-family="sans-serif" text-anchor="middle">水新鎮</text>
+        <text x="29" y="121" font-size="6" fill="#666" font-family="sans-serif" text-anchor="middle">門市</text>
+        <!-- 7-11 lower left -->
+        <rect x="67" y="93" width="20" height="13" rx="2" fill="#D32F2F" opacity="0.9"/>
+        <text x="77" y="102" font-size="7" fill="white" font-family="sans-serif" font-weight="bold" text-anchor="middle">7</text>
+        <!-- 美廉社 -->
+        <rect x="210" y="92" width="38" height="20" rx="2" fill="#388E3C" opacity="0.85"/>
+        <text x="229" y="105" font-size="6.5" fill="white" font-family="sans-serif" text-anchor="middle">美廉社</text>
+        <!-- More lower blocks -->
+        <rect x="92" y="94" width="80" height="42" rx="3" fill="#D0CCB8" opacity="0.6"/>
+        <rect x="258" y="94" width="62" height="42" rx="3" fill="#CBD5E0" opacity="0.6"/>
+        <rect x="330" y="94" width="44" height="42" rx="3" fill="#D0CCB8" opacity="0.6"/>
+        <!-- Flower path -->
+        <rect x="8" y="136" width="85" height="7" rx="3" fill="#90C97A" opacity="0.8"/>
+        <text x="50" y="142.5" font-size="5.8" fill="#3A6A2A" font-family="sans-serif" text-anchor="middle">北投子溪櫻花林步道</text>
+
+        <!-- PIN at 新市一路三段108號 ~x=148, y=95 -->
+        <ellipse cx="162" cy="104" rx="8" ry="3" fill="rgba(0,0,0,0.15)"/>
+        <path d="M162,82 C162,82 149,95 149,102 A13,13 0 0,0 175,102 C175,95 162,82 162,82 Z" fill="#FF6B1A" stroke="white" stroke-width="1.2"/>
+        <circle cx="162" cy="100" r="5.5" fill="white"/>
+        <path d="M159,99.5 L162,96.5 L165,99.5 L165,103 L159,103 Z" fill="#FF6B1A"/>
+        <!-- Bubble label -->
+        <rect x="126" y="66" width="72" height="17" rx="8.5" fill="white" opacity="0.95" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.2))"/>
+        <text x="162" y="78" font-size="8.5" fill="#FF6B1A" font-family="sans-serif" font-weight="700" text-anchor="middle">📍 我的房子</text>
+      </svg>
+    </div>
+
+    <div style="margin-bottom:4px">
+      <div class="price-label">房屋總價</div>
+      <div class="price-big">1,268<span> 萬</span></div>
+      <div class="price-unit">單價：25.3 萬元／坪</div>
+    </div>
+
+    <div class="price-note-row">
+      <div class="price-note">更新日期：<strong>2026.2.19</strong></div>
+      <div class="price-note">AI 即時估價系統</div>
+    </div>
+
+    <div class="price-parking">
+      <span style="font-size:22px">🚗</span>
+      <div style="flex:1">
+        <div class="price-parking-label">車位價格（平面）</div>
+        <div class="price-parking-val">120 萬元</div>
+      </div>
+      <svg width="15" height="15" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- M2 與上月比較 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M2</span>
+    <span class="section-title">與上月比較</span>
+  </div>
+  <div class="section-body">
+    <div class="compare-row">
+      <div class="compare-arrow-circle">
+        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </div>
+      <div>
+        <div class="compare-pct">+1.3%</div>
+        <div class="compare-sub">較上月上漲</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:14px;font-weight:700;color:var(--green)">+16.4 萬</div>
+        <div style="font-size:11px;color:var(--gray-500)">漲幅金額</div>
+      </div>
+    </div>
+
+    <div class="history-row">
+      <div>
+        <div class="history-date">歷史成交</div>
+        <div style="font-size:10px;color:var(--gray-500)">2024.4.5.</div>
+      </div>
+      <div class="history-price">1,180 萬元</div>
+      <div class="history-badge">↑ +3.5%</div>
+    </div>
+  </div>
+</div>
+
+<!-- M3 區域行情 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M3</span>
+    <span class="section-title">區域行情</span>
+  </div>
+  <div class="section-body">
+    <div class="bar-row">
+      <div class="bar-meta">
+        <span class="bar-name">淡水區平均</span>
+        <span class="bar-val">1,230 萬</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill region"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-meta">
+        <span class="bar-name" style="color:var(--orange);font-weight:700">我家</span>
+        <span class="bar-val" style="color:var(--orange)">1,268 萬</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill mine"></div></div>
+    </div>
+
+    <div class="region-badge">📈 高於區域平均 +3.1%</div>
+
+    <div class="extend-cards">
+      <div class="extend-card">
+        <span class="extend-card-icon">🏘️</span>
+        <span class="extend-card-text">區域行情</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+      <div class="extend-card">
+        <span class="extend-card-icon">🏠</span>
+        <span class="extend-card-text">我的社區</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M4 相似房屋 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M4</span>
+    <span class="section-title">相似房屋</span>
+  </div>
+  <div class="section-body">
+    <div style="font-size:12px;color:var(--gray-500)">同社區・相近坪數・近三個月成交</div>
+
+    <div class="price-range-track">
+      <div class="price-range-bar">
+        <div class="price-range-fill"></div>
+      </div>
+      <div class="price-range-marker">
+        <div class="price-range-tooltip">你家在這裡</div>
+        <div class="price-range-dot"></div>
+      </div>
+    </div>
+
+    <div class="price-range-labels">
+      <span>低 <strong>1,220萬</strong></span>
+      <span>中位 1,260萬</span>
+      <span>高 <strong>1,300萬</strong></span>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="extend-cards">
+      <div class="extend-card">
+        <span class="extend-card-icon">📋</span>
+        <span class="extend-card-text">周邊實價登錄</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M5 房價趨勢 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M5</span>
+    <span class="section-title">房價趨勢</span>
+  </div>
+  <div class="section-body">
+    <div style="font-size:10px;color:var(--gray-500);margin-bottom:4px">萬元/坪</div>
+    <div class="chart-wrap">
+      <svg class="chart-svg" viewBox="0 0 340 138" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0.01"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Grid lines -->
+        <line x1="36" y1="8"   x2="340" y2="8"   stroke="#EBEBEB" stroke-width="1"/>
+        <line x1="36" y1="32"  x2="340" y2="32"  stroke="#EBEBEB" stroke-width="1"/>
+        <line x1="36" y1="56"  x2="340" y2="56"  stroke="#EBEBEB" stroke-width="1"/>
+        <line x1="36" y1="80"  x2="340" y2="80"  stroke="#EBEBEB" stroke-width="1"/>
+        <line x1="36" y1="104" x2="340" y2="104" stroke="#EBEBEB" stroke-width="1"/>
+        <line x1="36" y1="125" x2="340" y2="125" stroke="#EBEBEB" stroke-width="1"/>
+
+        <!-- Y labels  60=8, 50=32, 40=56, 30=80, 20=104, 15=125 -->
+        <text x="32" y="11"  font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">60</text>
+        <text x="32" y="35"  font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">50</text>
+        <text x="32" y="59"  font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">40</text>
+        <text x="32" y="83"  font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">30</text>
+        <text x="32" y="107" font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">20</text>
+        <text x="32" y="127" font-size="8" fill="#BBB" font-family="sans-serif" text-anchor="end">15</text>
+
+        <!--
+          X positions: 2013=40, 2014=61, 2015=82, 2016=103, 2017=124, 2018=145, 2019=166, 2020=187, 2021=208, 2022=229, 2023=250, 2024=271, 2025=292, 2026=313
+          Y formula: y = 125 - (val - 15) * (125-8) / (60-15) = 125 - (val-15)*2.6
+
+          新北市(dashed blue): 32,35,38,38,36,36,36,37,40,47,50,57,57,55
+          淡水區(dotted green): 20,23,25,25,24,23,23,23,24,28,30,34,34,34
+          標的住宅(solid orange): 20,22,24,24,23,21,21,21,22,26,27,33,33,32
+        -->
+
+        <!-- 新北市 dashed blue -->
+        <polyline points="
+          40,42
+          61,33
+          82,22
+          103,22
+          124,28
+          145,28
+          166,28
+          187,25
+          208,21
+          229,5
+          250,1
+          271,0
+          292,0
+          313,3
+        " fill="none" stroke="#4A9FFF" stroke-width="2" stroke-dasharray="5,4" opacity="0.8" stroke-linejoin="round"/>
+
+        <!-- 淡水區 dotted green -->
+        <polyline points="
+          40,107
+          61,97
+          82,89
+          103,89
+          124,94
+          145,97
+          166,97
+          187,97
+          208,91
+          229,80
+          250,72
+          271,60
+          292,60
+          313,60
+        " fill="none" stroke="#34C784" stroke-width="2" stroke-dasharray="3,4" opacity="0.9" stroke-linejoin="round"/>
+
+        <!-- 標的住宅 area -->
+        <path d="
+          M40,107 L61,99 L82,89 L103,89 L124,94 L145,99 L166,99 L187,99 L208,96 L229,81 L250,73 L271,58 L292,58 L313,61
+          L313,138 L40,138 Z
+        " fill="url(#areaGrad)"/>
+
+        <!-- 標的住宅 solid orange line -->
+        <polyline points="
+          40,107
+          61,99
+          82,89
+          103,89
+          124,94
+          145,99
+          166,99
+          187,99
+          208,96
+          229,81
+          250,73
+          271,58
+          292,58
+          313,61
+        " fill="none" stroke="#FF6B1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Dots on orange line -->
+        <circle cx="40"  cy="107" r="3" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+        <circle cx="103" cy="89"  r="3" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+        <circle cx="166" cy="99"  r="3" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+        <circle cx="229" cy="81"  r="3" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+        <circle cx="292" cy="58"  r="3" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+        <circle cx="313" cy="61"  r="5" fill="#FF6B1A" stroke="white" stroke-width="2"/>
+
+        <!-- 歷史交易 red dot at 2024 -->
+        <circle cx="271" cy="58" r="5.5" fill="#EF4444" stroke="white" stroke-width="2"/>
+
+        <!-- X labels -->
+        <text x="40"  y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2013</text>
+        <text x="82"  y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2015</text>
+        <text x="124" y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2017</text>
+        <text x="166" y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2019</text>
+        <text x="208" y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2021</text>
+        <text x="250" y="138" font-size="7.5" fill="#BBB" font-family="sans-serif" text-anchor="middle">2023</text>
+        <text x="313" y="138" font-size="7.5" fill="#FF6B1A" font-family="sans-serif" font-weight="700" text-anchor="middle">2026</text>
+      </svg>
+    </div>
+
+    <div class="chart-legend">
+      <div class="legend-item">
+        <div class="legend-line solid"></div>
+        <span>標的住宅</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line dotted-green"></div>
+        <span>淡水區</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line dashed-blue"></div>
+        <span>新北市</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot"></div>
+        <span>歷史交易</span>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="extend-cards">
+      <div class="extend-card">
+        <span class="extend-card-icon">📊</span>
+        <span class="extend-card-text">3~5年趨勢圖</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M6 本月重點 -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">M6</span>
+    <span class="section-title">本月重點</span>
+  </div>
+  <div class="section-body">
+    <div class="insight-box">
+      <div class="insight-icon">🔍</div>
+      <div class="insight-text">本月你家的價格小幅上升，主要與區域成交量增加有關。</div>
+      <div class="insight-date">2026年2月・AI 自動分析</div>
+    </div>
+
+    <div class="extend-cards">
+      <div class="extend-card hot">
+        <span class="extend-card-icon">🏗️</span>
+        <span class="extend-card-text">區域預售屋行情</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+      <div class="extend-card hot">
+        <span class="extend-card-icon">🔑</span>
+        <span class="extend-card-text">區域租屋行情</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+      <div class="extend-card">
+        <span class="extend-card-icon">💡</span>
+        <span class="extend-card-text">了解更多</span>
+        <span class="extend-card-arrow">›</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LINE 加好友 -->
+<div class="line-card">
+  <div class="line-icon">💬</div>
+  <div class="line-info">
+    <div class="line-title">加 LINE 好友</div>
+    <div class="line-sub">自動通知最新估價・不漏接行情</div>
+  </div>
+  <button class="line-btn">立即加入</button>
+</div>
+
+<div class="bottom-spacer"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label" style="color:var(--orange)">我的房子</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-label">找實登</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">行情</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">我的</span>
+  </div>
+</div>
+
+</body>
+</html>
