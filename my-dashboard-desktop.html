@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard｜HousePlus 市場行情</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --grad:        linear-gradient(110deg, #FF6B1A 0%, #FF9A2E 58%, #FFB830 100%);
+  --orange:      #FF6B1A;
+  --amber:       #FF9A2E;
+  --yellow:      #FFB830;
+  --orange-pale: #FFF4EE;
+  --orange-mid:  #FFE0CC;
+  --bg:          #F4F4F6;
+  --card:        #FFFFFF;
+  --border:      #EEEEEE;
+  --gray-100:    #F8F8F8;
+  --gray-200:    #F0F0F0;
+  --gray-500:    #999999;
+  --gray-700:    #555555;
+  --dark:        #1A1A1A;
+  --green:       #22C55E;
+  --green-pale:  #ECFDF5;
+  --blue:        #4A9FFF;
+  --teal:        #34C784;
+  --red:         #EF4444;
+  --age1:        #FF6B1A;
+  --age2:        #FF9A2E;
+  --age3:        #FFB830;
+  --age4:        #FFD980;
+  --age5:        #E0E0E0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background: var(--grad);
+  height: 58px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 20px rgba(255,107,26,0.3);
+}
+
+.topbar-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700; font-size: 20px;
+  color: white; letter-spacing: -0.5px;
+}
+
+.topbar-divider {
+  width: 1px; height: 18px;
+  background: rgba(255,255,255,0.35);
+  margin: 0 14px;
+}
+
+.topbar-section { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+
+.topbar-nav {
+  display: flex; align-items: center; gap: 4px;
+  margin-left: auto;
+}
+
+.nav-btn {
+  padding: 7px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.82);
+  cursor: pointer; transition: background 0.15s;
+  border: none; background: none;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+.nav-btn.active { background: rgba(255,255,255,0.22); color: white; font-weight: 700; }
+
+.topbar-right {
+  display: flex; align-items: center; gap: 10px;
+  margin-left: 24px;
+}
+
+.btn-line {
+  background: #06C755; color: white;
+  font-size: 12px; font-weight: 700;
+  padding: 7px 14px; border-radius: 20px;
+  border: none; cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* ─── HERO BANNER ─── */
+.hero {
+  background: var(--grad);
+  padding: 28px 32px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute; top: -60px; right: 100px;
+  width: 260px; height: 260px;
+  background: rgba(255,255,255,0.07); border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -50px; right: -50px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.05); border-radius: 50%;
+}
+
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  position: relative; z-index: 1;
+}
+
+.hero-left {}
+
+.hero-eyebrow {
+  font-size: 12px; color: rgba(255,255,255,0.75);
+  margin-bottom: 6px; font-weight: 500;
+}
+
+.hero-title {
+  font-size: 32px; font-weight: 900;
+  color: white; letter-spacing: -0.5px; line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.hero-subtitle {
+  font-size: 14px; color: rgba(255,255,255,0.78);
+  line-height: 1.6; max-width: 480px;
+}
+
+/* Region selector */
+.region-selectors {
+  display: flex; gap: 12px; align-items: center;
+}
+
+.sel-box {
+  background: white; border-radius: 10px;
+  padding: 10px 18px;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; min-width: 130px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+.sel-label { font-size: 13px; font-weight: 600; color: var(--dark); flex: 1; }
+.sel-arrow { font-size: 11px; color: var(--gray-500); }
+
+/* ─── MAIN GRID ─── */
+.main {
+  max-width: 1200px; margin: 0 auto;
+  padding: 26px 32px 60px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 22px;
+}
+
+/* ─── CARD BASE ─── */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  animation: fadeUp 0.45s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card:nth-child(1){ animation-delay: 0.04s; }
+.card:nth-child(2){ animation-delay: 0.08s; }
+.card:nth-child(3){ animation-delay: 0.12s; }
+.card:nth-child(4){ animation-delay: 0.16s; }
+.card:nth-child(5){ animation-delay: 0.20s; }
+
+.card-header {
+  background: var(--grad);
+  padding: 11px 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.card-tag {
+  background: rgba(255,255,255,0.26);
+  color: white; font-size: 10px; font-weight: 800;
+  padding: 2px 8px; border-radius: 20px; letter-spacing: 0.8px;
+}
+
+.card-title { font-size: 14px; font-weight: 700; color: white; }
+.card-subtitle { font-size: 11px; color: rgba(255,255,255,0.72); margin-left: auto; }
+
+.card-body { padding: 20px 22px 22px; }
+
+/* ─── MARKET STATS ROW ─── */
+.market-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.mstat {
+  background: var(--gray-100);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mstat.highlight {
+  background: var(--orange-pale);
+  border: 1px solid var(--orange-mid);
+}
+
+.mstat::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--grad);
+}
+
+.mstat-region { font-size: 11px; color: var(--gray-500); font-weight: 500; }
+.mstat-val {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--orange); line-height: 1; letter-spacing: -0.5px;
+}
+.mstat-unit { font-size: 11px; color: var(--gray-500); }
+
+.mstat-change {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600;
+}
+.mstat-change.down { color: var(--teal); }
+.mstat-change.up   { color: var(--red); }
+
+/* ─── BUILDING TYPE GRID ─── */
+.btype-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.btype-card {
+  background: var(--gray-100);
+  border-radius: 11px;
+  padding: 13px 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 2px solid transparent;
+}
+.btype-card.active {
+  background: var(--orange-pale);
+  border-color: var(--orange-mid);
+}
+.btype-card:hover:not(.active) { background: var(--gray-200); }
+
+.btype-name { font-size: 12px; color: var(--gray-700); font-weight: 500; margin-bottom: 4px; }
+.btype-val {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--orange); line-height: 1; letter-spacing: -0.5px;
+}
+.btype-unit { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+
+/* ─── BAR CHART (交易量) ─── */
+.bar-chart-wrap {
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 10px 0 0;
+  position: relative;
+}
+
+/* Y gridlines */
+.bar-chart-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 24px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--gray-200) 0px, var(--gray-200) 1px,
+    transparent 1px, transparent 25%
+  );
+  pointer-events: none;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: filter 0.2s;
+  cursor: pointer;
+}
+.bar:hover { filter: brightness(1.1); }
+
+.bar.type1 { background: var(--grad); height: 110px; }
+.bar.type2 { background: linear-gradient(180deg, #FF9A2E, #FFB830); height: 82px; }
+.bar.type3 { background: linear-gradient(180deg, #FFB830, #FFD980); height: 54px; }
+.bar.type4 { background: var(--gray-300); height: 16px; }
+
+.bar-label { font-size: 11px; color: var(--gray-500); text-align: center; }
+
+.bar-val-label {
+  position: absolute;
+  top: -20px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px; font-weight: 700;
+  color: var(--gray-700); white-space: nowrap;
+}
+
+.y-labels {
+  position: absolute;
+  left: -32px; top: 0; bottom: 24px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  font-size: 9px; color: var(--gray-400);
+}
+
+/* ─── TREND CHART ─── */
+.trend-wrap {
+  height: 130px;
+  position: relative;
+  margin-top: 4px;
+}
+
+.trend-svg { width: 100%; height: 100%; overflow: visible; }
+
+.trend-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.tleg { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--gray-700); }
+.tleg-line { width: 18px; height: 2.5px; border-radius: 3px; }
+.tleg-line.orange { background: var(--orange); }
+.tleg-line.blue   { background: transparent; border-top: 2.5px dashed var(--blue); }
+.tleg-line.teal   { background: transparent; border-top: 2.5px dotted var(--teal); }
+.tleg-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ─── HORIZONTAL BAR (age) ─── */
+.age-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.age-tab {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--gray-700);
+  padding: 3px 10px; border-radius: 20px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+}
+.age-tab.active { border-color: var(--orange); color: var(--orange); font-weight: 700; }
+.age-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.hbar-list { display: flex; flex-direction: column; gap: 10px; }
+
+.hbar-row { display: flex; flex-direction: column; gap: 4px; }
+
+.hbar-meta {
+  display: flex; justify-content: space-between;
+  font-size: 11px;
+}
+.hbar-label { color: var(--gray-700); font-weight: 500; }
+.hbar-val { font-weight: 700; color: var(--dark); font-family: 'DM Sans', sans-serif; }
+
+.hbar-track {
+  height: 9px; background: var(--gray-200);
+  border-radius: 9px; overflow: hidden;
+}
+.hbar-fill { height: 100%; border-radius: 9px; }
+
+/* ─── DONUT CHART ─── */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.donut-svg-wrap {
+  position: relative;
+  width: 140px; height: 140px;
+  flex-shrink: 0;
+}
+
+.donut-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.donut-center-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--dark); line-height: 1;
+}
+
+.donut-center-sub {
+  font-size: 10px; color: var(--gray-500);
+}
+
+.donut-legend {
+  display: flex; flex-direction: column; gap: 8px; flex: 1;
+}
+
+.dleg-row {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 8px;
+}
+
+.dleg-left { display: flex; align-items: center; gap: 6px; }
+.dleg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.dleg-name { font-size: 11px; color: var(--gray-700); }
+.dleg-pct { font-size: 11px; font-weight: 700; color: var(--dark); font-family: 'DM Sans', sans-serif; }
+
+/* ─── QUICK LINKS ─── */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.quick-btn {
+  background: var(--orange-pale);
+  border: 1.5px solid var(--orange-mid);
+  border-radius: 13px;
+  padding: 16px 12px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 7px;
+  cursor: pointer; transition: all 0.18s;
+  text-decoration: none;
+  position: relative; overflow: hidden;
+}
+
+.quick-btn.featured {
+  background: var(--grad);
+  border-color: transparent;
+}
+
+.quick-btn:hover:not(.featured) {
+  background: var(--orange); border-color: var(--orange);
+}
+.quick-btn:hover:not(.featured) .qb-icon { filter: brightness(10); }
+.quick-btn:hover:not(.featured) .qb-label { color: white; }
+
+.qb-new {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--red); color: white;
+  font-size: 9px; font-weight: 800;
+  padding: 1px 5px; border-radius: 4px;
+}
+
+.qb-icon { font-size: 24px; }
+.qb-label { font-size: 12px; font-weight: 700; color: var(--orange); text-align: center; }
+.quick-btn.featured .qb-label { color: white; }
+
+/* ─── NEWS LIST ─── */
+.news-card {
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  animation: fadeUp 0.45s 0.22s ease both;
+}
+
+.news-list { display: flex; flex-direction: column; }
+
+.news-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 13px 22px;
+  border-bottom: 1px solid var(--gray-200);
+  cursor: pointer; transition: background 0.15s;
+}
+.news-item:last-child { border-bottom: none; }
+.news-item:hover { background: var(--gray-100); }
+
+.news-badge {
+  flex-shrink: 0; font-size: 9px; font-weight: 800;
+  padding: 2px 6px; border-radius: 4px;
+  letter-spacing: 0.5px; margin-top: 2px;
+}
+.nb-new  { background: var(--orange); color: white; }
+.nb-news { background: var(--gray-200); color: var(--gray-500); }
+.nb-ai   { background: #6366F1; color: white; }
+
+.news-text { font-size: 12px; color: var(--gray-700); line-height: 1.55; flex: 1; }
+
+/* ─── SIDEBAR ─── */
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+/* ─── SUMMARY BOX ─── */
+.summary-box {
+  background: var(--grad);
+  border-radius: 16px;
+  padding: 20px 22px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(255,107,26,0.25);
+  animation: fadeUp 0.45s 0.1s ease both;
+}
+
+.sb-title { font-size: 13px; font-weight: 700; opacity: 0.85; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.live-dot { width: 6px; height: 6px; background: #7AFF9E; border-radius: 50%; animation: blink 1.8s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.sb-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+
+.sb-item { display: flex; flex-direction: column; gap: 3px; }
+.sb-val {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px; font-weight: 700; line-height: 1; color: white;
+}
+.sb-val.green { color: #7AFF9E; }
+.sb-label { font-size: 10px; color: rgba(255,255,255,0.65); }
+
+.sb-divider { height: 1px; background: rgba(255,255,255,0.2); margin: 14px 0; }
+
+.sb-insight {
+  font-size: 13px; line-height: 1.7;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ─── SMALL METRIC CARDS ─── */
+.metric-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  animation: fadeUp 0.45s 0.14s ease both;
+}
+
+.metric-card {
+  background: var(--card); border-radius: 14px;
+  padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex; flex-direction: column; gap: 5px;
+}
+
+.mc-icon { font-size: 20px; margin-bottom: 2px; }
+.mc-label { font-size: 11px; color: var(--gray-500); }
+.mc-val {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--orange); line-height: 1;
+}
+.mc-sub { font-size: 10px; color: var(--gray-500); }
+
+/* ─── LINE CARD ─── */
+.line-card {
+  background: white; border-radius: 16px;
+  overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  animation: fadeUp 0.45s 0.26s ease both;
+}
+.line-icon { width: 44px; height: 44px; background: #06C755; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.line-info { flex: 1; }
+.line-title { font-size: 14px; font-weight: 700; color: var(--dark); }
+.line-sub { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+.line-btn { background: #06C755; color: white; font-size: 12px; font-weight: 700; padding: 9px 16px; border-radius: 20px; border: none; cursor: pointer; white-space: nowrap; font-family: 'Noto Sans TC', sans-serif; }
+
+/* ─── LEFT COL FULL WIDTH SECTION ─── */
+.col-left { display: flex; flex-direction: column; gap: 20px; }
+
+/* section headings */
+.sec-heading {
+  font-size: 15px; font-weight: 800; color: var(--dark);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.sec-heading::before {
+  content: '';
+  width: 4px; height: 18px;
+  background: var(--grad);
+  border-radius: 3px;
+}
+
+.unit-note { font-size: 11px; color: var(--gray-500); margin-left: auto; font-weight: 400; }
+</style>
+</head>
+<body>
+
+<!-- ─── TOPBAR ─── -->
+<div class="topbar">
+  <div class="topbar-logo">HousePlus</div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-section">My Dashboard</div>
+  <nav class="topbar-nav">
+    <button class="nav-btn">我的房子</button>
+    <button class="nav-btn active">市場總覽</button>
+    <button class="nav-btn">找實登</button>
+    <button class="nav-btn">貸款試算</button>
+  </nav>
+  <div class="topbar-right">
+    <button class="btn-line">💬 LINE 通知</button>
+  </div>
+</div>
+
+<!-- ─── HERO BANNER ─── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">市場行情總覽・2026年2月</div>
+      <div class="hero-title">市場變化，每天只要一眼就懂</div>
+      <div class="hero-subtitle">即時掌握你所在區域的房價走勢、建物類型分布與成交熱度，讓數據說話。</div>
+    </div>
+    <div class="region-selectors">
+      <div class="sel-box">
+        <span class="sel-label">新北市</span>
+        <span class="sel-arrow">▾</span>
+      </div>
+      <div class="sel-box">
+        <span class="sel-label">淡水區</span>
+        <span class="sel-arrow">▾</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+
+  <!-- ═══ LEFT COLUMN ═══ -->
+  <div class="col-left">
+
+    <!-- 市場指標 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-tag">行情</span>
+        <span class="card-title">新北市淡水區｜近一年交易行情</span>
+        <span class="card-subtitle">單位：萬元／坪</span>
+      </div>
+      <div class="card-body">
+        <div class="market-row">
+          <div class="mstat">
+            <div class="mstat-region">新北市</div>
+            <div class="mstat-val">34.12</div>
+            <div class="mstat-change down">↓ -0.28%</div>
+            <div class="mstat-unit">萬元／坪</div>
+          </div>
+          <div class="mstat highlight">
+            <div class="mstat-region">淡水區</div>
+            <div class="mstat-val">32.85</div>
+            <div class="mstat-change up">↑ +1.66%</div>
+            <div class="mstat-unit">萬元／坪</div>
+          </div>
+          <div class="mstat">
+            <div class="mstat-region">本月成交件數</div>
+            <div class="mstat-val">214</div>
+            <div class="mstat-change down">↓ -12.0% 較上月</div>
+            <div class="mstat-unit">件</div>
+          </div>
+          <div class="mstat">
+            <div class="mstat-region">預售屋均價</div>
+            <div class="mstat-val">41.20</div>
+            <div class="mstat-change up">↑ +3.1%</div>
+            <div class="mstat-unit">萬元／坪</div>
+          </div>
+        </div>
+
+        <!-- 建物類型 -->
+        <div class="sec-heading">
+          淡水區各建物類型量價表現
+          <span class="unit-note">單位：萬元／坪・萬元</span>
+        </div>
+
+        <div class="btype-grid">
+          <div class="btype-card active">
+            <div class="btype-name">住宅大樓</div>
+            <div class="btype-val">32.85</div>
+            <div class="btype-unit">萬元／坪</div>
+          </div>
+          <div class="btype-card">
+            <div class="btype-name">華廈</div>
+            <div class="btype-val">28.40</div>
+            <div class="btype-unit">萬元／坪</div>
+          </div>
+          <div class="btype-card">
+            <div class="btype-name">公寓</div>
+            <div class="btype-val">24.60</div>
+            <div class="btype-unit">萬元／坪</div>
+          </div>
+          <div class="btype-card">
+            <div class="btype-name">透天厝</div>
+            <div class="btype-val">3,820</div>
+            <div class="btype-unit">萬元（總價）</div>
+          </div>
+        </div>
+
+        <!-- 交易量柱狀圖 -->
+        <div class="sec-heading">各建物類型成交量（件）</div>
+
+        <div style="position:relative;padding-left:36px">
+          <div class="y-labels">
+            <span>500</span>
+            <span>375</span>
+            <span>250</span>
+            <span>125</span>
+            <span>0</span>
+          </div>
+          <div class="bar-chart-wrap">
+            <div class="bar-group">
+              <div class="bar type1">
+                <span class="bar-val-label">214件</span>
+              </div>
+              <div class="bar-label">住宅大樓</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar type2">
+                <span class="bar-val-label">142件</span>
+              </div>
+              <div class="bar-label">華廈</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar type3">
+                <span class="bar-val-label">86件</span>
+              </div>
+              <div class="bar-label">公寓</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar type4">
+                <span class="bar-val-label">12件</span>
+              </div>
+              <div class="bar-label">透天厝</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 價量趨勢圖 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-tag">趨勢</span>
+        <span class="card-title">淡水區價量變動趨勢</span>
+        <span class="card-subtitle">2021–2026</span>
+      </div>
+      <div class="card-body">
+        <div class="trend-wrap">
+          <svg class="trend-svg" viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="tg1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="tg2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4A9FFF" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#4A9FFF" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid -->
+            <line x1="0" y1="20" x2="720" y2="20" stroke="#F0F0F0" stroke-width="1"/>
+            <line x1="0" y1="50" x2="720" y2="50" stroke="#F0F0F0" stroke-width="1"/>
+            <line x1="0" y1="80" x2="720" y2="80" stroke="#F0F0F0" stroke-width="1"/>
+            <line x1="0" y1="108" x2="720" y2="108" stroke="#F0F0F0" stroke-width="1"/>
+
+            <!-- Volume bars (background) -->
+            <rect x="10"  y="70" width="28" height="38" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="62"  y="58" width="28" height="50" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="114" y="52" width="28" height="56" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="166" y="48" width="28" height="60" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="218" y="44" width="28" height="64" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="270" y="55" width="28" height="53" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="322" y="50" width="28" height="58" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="374" y="46" width="28" height="62" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="426" y="52" width="28" height="56" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="478" y="44" width="28" height="64" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="530" y="40" width="28" height="68" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="582" y="48" width="28" height="60" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="634" y="36" width="28" height="72" rx="3" fill="#FFB830" opacity="0.3"/>
+            <rect x="686" y="42" width="28" height="66" rx="3" fill="#FFB830" opacity="0.3"/>
+
+            <!-- 新北市 dashed blue area -->
+            <path d="M24,88 L76,78 L128,68 L180,62 L232,55 L284,58 L336,52 L388,46 L440,40 L492,32 L544,24 L596,18 L648,14 L700,16 L700,120 L24,120 Z" fill="url(#tg2)"/>
+            <polyline points="24,88 76,78 128,68 180,62 232,55 284,58 336,52 388,46 440,40 492,32 544,24 596,18 648,14 700,16"
+              fill="none" stroke="#4A9FFF" stroke-width="2" stroke-dasharray="6,4" opacity="0.75" stroke-linejoin="round"/>
+
+            <!-- 淡水區 dotted teal -->
+            <polyline points="24,100 76,94 128,88 180,84 232,78 284,80 336,76 388,70 440,64 492,58 544,52 596,44 648,40 700,42"
+              fill="none" stroke="#34C784" stroke-width="2" stroke-dasharray="3,4" opacity="0.85" stroke-linejoin="round"/>
+
+            <!-- 標的 orange solid -->
+            <path d="M24,104 L76,98 L128,92 L180,88 L232,82 L284,84 L336,80 L388,74 L440,68 L492,62 L544,56 L596,48 L648,44 L700,46 L700,120 L24,120 Z" fill="url(#tg1)"/>
+            <polyline points="24,104 76,98 128,92 180,88 232,82 284,84 336,80 388,74 440,68 492,62 544,56 596,48 648,44 700,46"
+              fill="none" stroke="#FF6B1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Dots on orange -->
+            <circle cx="24"  cy="104" r="3.5" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+            <circle cx="232" cy="82"  r="3.5" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+            <circle cx="440" cy="68"  r="3.5" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+            <circle cx="648" cy="44"  r="3.5" fill="white" stroke="#FF6B1A" stroke-width="2"/>
+            <circle cx="700" cy="46"  r="5.5" fill="#FF6B1A" stroke="white" stroke-width="2"/>
+
+            <!-- X labels -->
+            <text x="24"  y="120" font-size="8.5" fill="#CCC" font-family="sans-serif" text-anchor="middle">2021</text>
+            <text x="166" y="120" font-size="8.5" fill="#CCC" font-family="sans-serif" text-anchor="middle">2022</text>
+            <text x="322" y="120" font-size="8.5" fill="#CCC" font-family="sans-serif" text-anchor="middle">2023</text>
+            <text x="478" y="120" font-size="8.5" fill="#CCC" font-family="sans-serif" text-anchor="middle">2024</text>
+            <text x="634" y="120" font-size="8.5" fill="#CCC" font-family="sans-serif" text-anchor="middle">2025</text>
+            <text x="700" y="120" font-size="8.5" fill="#FF6B1A" font-family="sans-serif" font-weight="700" text-anchor="middle">2026</text>
+          </svg>
+        </div>
+        <div class="trend-legend">
+          <div class="tleg"><div class="tleg-line orange"></div><span>標的住宅</span></div>
+          <div class="tleg"><div class="tleg-line teal"></div><span>淡水區</span></div>
+          <div class="tleg"><div class="tleg-line blue"></div><span>新北市</span></div>
+          <div class="tleg"><div class="tleg-dot" style="background:var(--yellow);border:1px solid #E0C060"></div><span>成交量</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 快速連結 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-tag">快速</span>
+        <span class="card-title">市場快速入口</span>
+      </div>
+      <div class="card-body">
+        <div class="quick-grid">
+          <a class="quick-btn featured" href="#">
+            <span style="position:absolute;top:8px;right:8px;background:white;color:var(--orange);font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px">NEW</span>
+            <span class="qb-icon">🏗️</span>
+            <span class="qb-label">預售屋情報！</span>
+          </a>
+          <a class="quick-btn" href="#">
+            <span class="qb-icon">🤖</span>
+            <span class="qb-label">AI 估價</span>
+          </a>
+          <a class="quick-btn" href="#">
+            <span class="qb-icon">🏢</span>
+            <span class="qb-label">最新商辦市況</span>
+          </a>
+          <a class="quick-btn" href="#">
+            <span class="qb-icon">📋</span>
+            <span class="qb-label">實登最前線</span>
+          </a>
+          <a class="quick-btn" href="#">
+            <span class="qb-icon">🔑</span>
+            <span class="qb-label">租屋行情</span>
+          </a>
+          <a class="quick-btn" href="#">
+            <span class="qb-icon">💰</span>
+            <span class="qb-label">貸款試算</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <div class="news-card">
+      <div class="card-header" style="background:var(--grad)">
+        <span class="card-tag">NEWS</span>
+        <span class="card-title">最新市場消息</span>
+      </div>
+      <div class="news-list">
+        <div class="news-item">
+          <span class="news-badge nb-new">NEW</span>
+          <div class="news-text">預售屋情報！淡水新市鎮本季新推個案一覽，均價 41.2 萬元／坪</div>
+        </div>
+        <div class="news-item">
+          <span class="news-badge nb-ai">AI</span>
+          <div class="news-text">AI 估價升級！新增屋齡與裝潢加成功能，估算精準度提升 18%</div>
+        </div>
+        <div class="news-item">
+          <span class="news-badge nb-news">NEWS</span>
+          <div class="news-text">房市降溫加劇！全台房價指數連三月下跌，淡水區逆勢持穩</div>
+        </div>
+        <div class="news-item">
+          <span class="news-badge nb-news">NEWS</span>
+          <div class="news-text">新北台北都更危老破萬件政策利多，老屋估值走揚趨勢明顯</div>
+        </div>
+        <div class="news-item">
+          <span class="news-badge nb-news">NEWS</span>
+          <div class="news-text">最新商辦市況：大台北商辦空置率降至 4.2%，淡水輕軌商圈表現亮眼</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end col-left -->
+
+  <!-- ═══ RIGHT SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <!-- Summary box -->
+    <div class="summary-box">
+      <div class="sb-title">
+        <span class="live-dot"></span>
+        淡水區本月行情摘要
+      </div>
+      <div class="sb-grid">
+        <div class="sb-item">
+          <div class="sb-val">32.85</div>
+          <div class="sb-label">均價（萬元／坪）</div>
+        </div>
+        <div class="sb-item">
+          <div class="sb-val green">↑ +1.66%</div>
+          <div class="sb-label">月漲幅</div>
+        </div>
+        <div class="sb-item">
+          <div class="sb-val">454</div>
+          <div class="sb-label">本月成交件數</div>
+        </div>
+        <div class="sb-item">
+          <div class="sb-val green">↑ +8.1%</div>
+          <div class="sb-label">較上月量增</div>
+        </div>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-insight">
+        🔍 本月淡水區成交量回升，主要受惠輕軌沿線新案帶動，住宅大樓均價站穩 32 萬。
+      </div>
+    </div>
+
+    <!-- 2 metric cards -->
+    <div class="metric-row">
+      <div class="metric-card">
+        <div class="mc-icon">📊</div>
+        <div class="mc-label">全台交易件數</div>
+        <div class="mc-val">10,209</div>
+        <div class="mc-sub">↓ -12.0% 較上月</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-icon">🏗️</div>
+        <div class="mc-label">預售推案量</div>
+        <div class="mc-val">322件</div>
+        <div class="mc-sub">↑ +5.1% 較上月</div>
+      </div>
+    </div>
+
+    <!-- 建物年齡橫條圖 -->
+    <div class="card" style="animation: fadeUp 0.45s 0.16s ease both">
+      <div class="card-header">
+        <span class="card-tag">屋齡</span>
+        <span class="card-title">不同屋齡均價表現</span>
+      </div>
+      <div class="card-body">
+        <div class="age-tabs">
+          <div class="age-tab active"><div class="age-dot" style="background:var(--age1)"></div>住宅大樓</div>
+          <div class="age-tab"><div class="age-dot" style="background:var(--age2)"></div>華廈</div>
+          <div class="age-tab"><div class="age-dot" style="background:var(--age3)"></div>公寓</div>
+        </div>
+
+        <div class="hbar-list">
+          <div class="hbar-row">
+            <div class="hbar-meta">
+              <span class="hbar-label">小於5年</span>
+              <span class="hbar-val">42.18 萬</span>
+            </div>
+            <div class="hbar-track">
+              <div class="hbar-fill" style="width:100%;background:var(--age1)"></div>
+            </div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-meta">
+              <span class="hbar-label">5–20年</span>
+              <span class="hbar-val">36.54 萬</span>
+            </div>
+            <div class="hbar-track">
+              <div class="hbar-fill" style="width:86%;background:var(--age2)"></div>
+            </div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-meta">
+              <span class="hbar-label">20–40年</span>
+              <span class="hbar-val">30.12 萬</span>
+            </div>
+            <div class="hbar-track">
+              <div class="hbar-fill" style="width:71%;background:var(--age3)"></div>
+            </div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-meta">
+              <span class="hbar-label">大於40年</span>
+              <span class="hbar-val">26.80 萬</span>
+            </div>
+            <div class="hbar-track">
+              <div class="hbar-fill" style="width:63%;background:var(--age4)"></div>
+            </div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-meta">
+              <span class="hbar-label">暫無屋齡</span>
+              <span class="hbar-val">—</span>
+            </div>
+            <div class="hbar-track">
+              <div class="hbar-fill" style="width:20%;background:var(--age5)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 圓環圖：成交佔比 -->
+    <div class="card" style="animation: fadeUp 0.45s 0.20s ease both">
+      <div class="card-header">
+        <span class="card-tag">佔比</span>
+        <span class="card-title">各類型成交量佔比</span>
+      </div>
+      <div class="card-body">
+        <div class="donut-wrap">
+          <div class="donut-svg-wrap">
+            <svg viewBox="0 0 140 140" width="140" height="140">
+              <!-- Donut: r=52, cx=70, cy=70, circumference≈326.7 -->
+              <!-- 住宅大樓 33.05% → stroke-dasharray=108 218.7 offset=0 -->
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#FF6B1A" stroke-width="22"
+                stroke-dasharray="108 218.7" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+              <!-- 華廈 32.20% → 105.2 -->
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#FF9A2E" stroke-width="22"
+                stroke-dasharray="105.2 221.5" stroke-dashoffset="-108" transform="rotate(-90 70 70)"/>
+              <!-- 公寓 23.88% → 78 -->
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#FFB830" stroke-width="22"
+                stroke-dasharray="78 248.7" stroke-dashoffset="-213.2" transform="rotate(-90 70 70)"/>
+              <!-- 透天 10.87% → 35.5 -->
+              <circle cx="70" cy="70" r="52" fill="none" stroke="#FFD980" stroke-width="22"
+                stroke-dasharray="35.5 291.2" stroke-dashoffset="-291.2" transform="rotate(-90 70 70)"/>
+              <!-- Center hole -->
+              <circle cx="70" cy="70" r="40" fill="white"/>
+            </svg>
+            <div class="donut-center">
+              <div class="donut-center-num">454</div>
+              <div class="donut-center-sub">件</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            <div class="dleg-row">
+              <div class="dleg-left"><div class="dleg-dot" style="background:#FF6B1A"></div><span class="dleg-name">住宅大樓</span></div>
+              <span class="dleg-pct">33.05%</span>
+            </div>
+            <div class="dleg-row">
+              <div class="dleg-left"><div class="dleg-dot" style="background:#FF9A2E"></div><span class="dleg-name">華廈</span></div>
+              <span class="dleg-pct">32.20%</span>
+            </div>
+            <div class="dleg-row">
+              <div class="dleg-left"><div class="dleg-dot" style="background:#FFB830"></div><span class="dleg-name">公寓</span></div>
+              <span class="dleg-pct">23.88%</span>
+            </div>
+            <div class="dleg-row">
+              <div class="dleg-left"><div class="dleg-dot" style="background:#FFD980"></div><span class="dleg-name">透天厝</span></div>
+              <span class="dleg-pct">10.87%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINE -->
+    <div class="line-card">
+      <div class="line-icon">💬</div>
+      <div class="line-info">
+        <div class="line-title">加 LINE 好友</div>
+        <div class="line-sub">每月自動推播最新行情摘要</div>
+      </div>
+      <button class="line-btn">立即加入</button>
+    </div>
+
+  </div><!-- end sidebar -->
+
+</div><!-- end main -->
+
+</body>
+</html>
